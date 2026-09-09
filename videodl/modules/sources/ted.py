@@ -33,7 +33,7 @@ class TedVideoClient(BaseVideoClient):
     def parsefromurl(self, url: str, request_overrides: dict = None):
         # prepare
         if not self.belongto(url=url): return []
-        request_overrides, video_info, null_backup_title = request_overrides or {}, VideoInfo(source=self.source), yieldtimerelatedtitle(self.source)
+        request_overrides, video_info, null_backup_title = request_overrides or {}, VideoInfo(source=self.source, nm3u8dlre_settings={"--auto-select": False, "-sv": "best", "-sa": "best", "-M": "format=mp4:skip_sub=true"}), yieldtimerelatedtitle(self.source)
         # try parse
         try:
             vid = urlparse(url).path.strip('/').split('/')[-1]
@@ -44,11 +44,11 @@ class TedVideoClient(BaseVideoClient):
             download_url = safeextractfromdict(player_data, ['resources', 'hls', 'stream'], '') or safeextractfromdict(sorted(safeextractfromdict(player_data, ['resources', 'h264'], []), key=lambda x: x.get('bitrate', 0), reverse=True), [0, 'file'], '') or safeextractfromdict(sorted(safeextractfromdict(player_data, ['resources', 'rtmp'], []), key=lambda x: x.get('width', 0) * x.get('height', 0), reverse=True), [0, 'file'], '')
             video_info.update(dict(download_url=download_url))
             guess_video_ext_result = FileTypeSniffer.getfileextensionfromurl(url=download_url, headers=self.default_download_headers, request_overrides=request_overrides, cookies=self.default_download_cookies)
-            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info['ext']
+            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info.ext
             video_title = safeextractfromdict(raw_data["props"]["pageProps"]["videoData"], ['title'], None) or null_backup_title
             video_title = legalizestring(video_title, replace_null_string=null_backup_title).removesuffix('.')
             cover_url = safeextractfromdict(raw_data, ['props', 'pageProps', 'videoData', 'primaryImageSet', 0, 'url'], None)
-            video_info.update(dict(title=video_title, file_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=cover_url))
+            video_info.update(dict(title=video_title, save_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=cover_url))
         except Exception as err:
             video_info.update(dict(err_msg=(err_msg := f'{self.source}.parsefromurl >>> {url} (Error: {err})')))
             self.logger_handle.error(err_msg, disable_print=self.disable_print)

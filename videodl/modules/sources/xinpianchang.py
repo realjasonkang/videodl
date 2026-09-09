@@ -39,23 +39,18 @@ class XinpianchangVideoClient(BaseVideoClient):
             app_key, vid = raw_data['props']['pageProps']['detail']['video']['appKey'], raw_data['props']['pageProps']['detail']['video']["vid"]
             (resp := self.get(f"https://mod-api.xinpianchang.com/mod/api/v2/media/{vid}?appKey={app_key}&extend=userInfo%2CuserStatus", **request_overrides)).raise_for_status()
             raw_data[f'media/{vid}'] = resp2json(resp=resp); resource: dict = raw_data[f'media/{vid}']['data']['resource']; video_info.update(dict(raw_data=raw_data))
-            for k, v in resource.items():
-                if k in ('dash', 'hls') and isinstance(v, dict): download_url = v.get('url'); break
-                elif k in ('progressive',) and isinstance(v, list):
-                    sorted_by_resolution = sorted(v, key=lambda x: (x.get('height', 0) * x.get('width', 0), x.get('filesize', 0)), reverse=True)
-                    download_url = [(item.get('url') or item.get('backupUrl')) for item in sorted_by_resolution if (item.get('url') or item.get('backupUrl'))][0]; break
-            video_info.update(dict(download_url=download_url))
+            video_info.update(dict(download_url=next((v.get('url') if k in ('dash', 'hls') and isinstance(v, dict) else next((item.get('url') or item.get('backupUrl') for item in sorted(v, key=lambda x: (x.get('height', 0) * x.get('width', 0), x.get('filesize', 0)), reverse=True) if item.get('url') or item.get('backupUrl')), None) for k, v in resource.items() if (k in ('dash', 'hls') and isinstance(v, dict)) or (k == 'progressive' and isinstance(v, list))), None)))
             video_title = legalizestring(safeextractfromdict(raw_data[f'media/{vid}'], ['data', 'title'], None) or null_backup_title, replace_null_string=null_backup_title).removesuffix('.')
-            guess_video_ext_result = FileTypeSniffer.getfileextensionfromurl(url=download_url, headers=self.default_download_headers, request_overrides=request_overrides, cookies=self.default_download_cookies)
-            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info['ext']
-            video_info.update(dict(title=video_title, file_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=safeextractfromdict(raw_data[f'media/{vid}'], ['data', 'cover'], None)))
+            guess_video_ext_result = FileTypeSniffer.getfileextensionfromurl(url=video_info.download_url, headers=self.default_download_headers, request_overrides=request_overrides, cookies=self.default_download_cookies)
+            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info.ext
+            video_info.update(dict(title=video_title, save_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=safeextractfromdict(raw_data[f'media/{vid}'], ['data', 'cover'], None)))
         except Exception as err:
             video_info.update(dict(err_msg=(err_msg := f'{self.source}._parsefromurlwithwww >>> {url} (Error: {err})')))
             self.logger_handle.error(err_msg, disable_print=self.disable_print)
         # return
         return [video_info]
     '''_parsefromurlwithstock'''
-    def _parsefromurlwithstock(self, url: str, request_overrides: dict = None):
+    def _parsefromurlwithstock(self, url: str, request_overrides: dict = None) -> list[VideoInfo]:
         # prepare
         if not self.belongto(url=url): return []
         request_overrides, video_info, null_backup_title = request_overrides or {}, VideoInfo(source=self.source), yieldtimerelatedtitle(self.source)
@@ -63,7 +58,7 @@ class XinpianchangVideoClient(BaseVideoClient):
         try:
             vid = urlparse(url).path.strip('/').split('/')[-1]
             page = DrissionPageUtils.initsmartbrowser(headless=True, requests_headers=None, requests_proxies=(request_overrides.get('proxies') or self._autosetproxies()), requests_cookies=(request_overrides.get('cookies') or self.default_cookies))
-            page.get(url=url); page.wait.eles_loaded('tag:video', timeout=15); video_info.update(dict(raw_data=page.html)); page.quit()
+            page.get(url=url); page.wait.eles_loaded('tag:video', timeout=15); video_info.update(dict(raw_data=page.html)); DrissionPageUtils.quitpage(page=page)
             soup, result = BeautifulSoup(video_info.raw_data, 'lxml'), {"title": None, "cover": None, "video_url": None}
             if (h1_tag := soup.find('h1')): result['title'] = h1_tag.get_text(strip=True)
             if not result['title']: (og_title := soup.find('meta', property='og:title')) and result.__setitem__('title', og_title.get('content'))
@@ -74,8 +69,8 @@ class XinpianchangVideoClient(BaseVideoClient):
             video_info.update(dict(download_url=result['video_url'])); assert result['video_url']
             video_title = legalizestring(result['title'] or null_backup_title, replace_null_string=null_backup_title).removesuffix('.')
             guess_video_ext_result = FileTypeSniffer.getfileextensionfromurl(url=result['video_url'], headers=self.default_download_headers, request_overrides=request_overrides, cookies=self.default_download_cookies)
-            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info['ext']
-            video_info.update(dict(title=video_title, file_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=result['cover']))
+            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info.ext
+            video_info.update(dict(title=video_title, save_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=result['cover']))
         except Exception as err:
             video_info.update(dict(err_msg=(err_msg := f'{self.source}._parsefromurlwithstock >>> {url} (Error: {err})')))
             self.logger_handle.error(err_msg, disable_print=self.disable_print)
@@ -83,7 +78,7 @@ class XinpianchangVideoClient(BaseVideoClient):
         return [video_info]
     '''parsefromurl'''
     @useparseheaderscookies
-    def parsefromurl(self, url: str, request_overrides: dict = None):
+    def parsefromurl(self, url: str, request_overrides: dict = None) -> list[VideoInfo]:
         video_infos = (self._parsefromurlwithstock if ('stock.xinpianchang.com' in obtainhostname(url)) else self._parsefromurlwithwww)(url, request_overrides)
         return video_infos
     '''belongto'''

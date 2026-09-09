@@ -12,6 +12,7 @@ from pathlib import Path
 from contextlib import suppress
 from .base import BaseVideoClient
 from ..utils import initcdm, closecdm
+from ..utils.cmd import DownloadWithNM3U8DLRECommand
 from urllib.parse import urlparse, urlencode, urlunparse
 from ..utils import legalizestring, useparseheaderscookies, yieldtimerelatedtitle, resp2json, safeextractfromdict, VideoInfo
 
@@ -37,7 +38,7 @@ class WittyTVVideoClient(BaseVideoClient):
         self._initsession()
     '''_getbearertoken'''
     def _getbearertoken(self, request_overrides: dict = None):
-        request_overrides = request_overrides or {}
+        request_overrides = dict(request_overrides or {})
         (resp := self.post(WittyTVVideoClient.LOGIN_URL, json={'client_id': 'client_id', 'appName': 'embed//mediasetplay-embed'}, **request_overrides)).raise_for_status()
         device_id = resp2json(resp=resp)["response"]["beToken"]
         return device_id
@@ -57,24 +58,24 @@ class WittyTVVideoClient(BaseVideoClient):
             program = raw_data['PROGRAM_URL_RESPONSE'].get("mediasetprogram$brandTitle", None) or raw_data['PROGRAM_URL_RESPONSE'].get("mediasetprogram$auditelBrandName", None) or raw_data['PROGRAM_URL_RESPONSE'].get("mediasetprogram$tvLinearSeasonTitle", None)
             if not program: video_title = legalizestring(raw_data['PROGRAM_URL_RESPONSE'].get('title') or null_backup_title, replace_null_string=null_backup_title).removesuffix('.')
             else: video_title = legalizestring(f"{program}-{raw_data['PROGRAM_URL_RESPONSE'].get('title') or null_backup_title}", replace_null_string=null_backup_title).removesuffix('.')
-            (resp := self.post(WittyTVVideoClient.PLAYBACK_URL, json={'contentId': content_id, 'streamType': 'VOD'}, headers={'Authorization': f'Bearer {self.BEARER_TOKEN}'})).raise_for_status()
+            (resp := self.post(WittyTVVideoClient.PLAYBACK_URL, json={'contentId': content_id, 'streamType': 'VOD'}, headers={'Authorization': f'Bearer {self.BEARER_TOKEN}'}, **request_overrides)).raise_for_status()
             raw_data['PLAYBACK_URL_RESPONSE'] = resp2json(resp=resp)
             media_selector: dict = raw_data['PLAYBACK_URL_RESPONSE']["response"]["mediaSelector"]
             manifest = media_selector.pop("url"); media_selector["auth"] = self.BEARER_TOKEN
-            (resp := self.get(f"{manifest}?{urlencode(media_selector)}", headers={'Accept': 'application/json, text/plain, */*', 'Origin': WittyTVVideoClient.MEDIASET_URL, 'Referer': WittyTVVideoClient.MEDIASET_URL})).raise_for_status()
+            (resp := self.get(f"{manifest}?{urlencode(media_selector)}", headers={'Accept': 'application/json, text/plain, */*', 'Origin': WittyTVVideoClient.MEDIASET_URL, 'Referer': WittyTVVideoClient.MEDIASET_URL}, **request_overrides)).raise_for_status()
             raw_data['MANIFEST_URL_RESPONSE'] = resp.text; matches = re.findall(r'<video\s*src="([^"]+)"', raw_data['MANIFEST_URL_RESPONSE'])
             download_url: str = [m for m in matches if ".mpd" in m][0]
             parsed_url = urlparse(download_url); path_parts = parsed_url.path.split("/"); suffix_parts = path_parts[-1].split("_")[1:]
             for resolution in WittyTVVideoClient.RES_PRIORITY:
-                with suppress(Exception): candidate_url = urlunparse(parsed_url._replace(path="/".join([*path_parts[:-1], "_".join([resolution, *suffix_parts])]))); response = self.get(f"{candidate_url}?formats={media_selector['formats']}", **request_overrides); assert 200 <= response.status_code < 300; pssh = min(re.findall(r"<cenc:pssh>(.+?)</cenc:pssh>", response.text), key=len, default=None); result = (candidate_url, str(pssh) if pssh else None); break
+                with suppress(Exception): candidate_url = urlunparse(parsed_url._replace(path="/".join([*path_parts[:-1], "_".join([resolution, *suffix_parts])]))); (resp := self.get(f"{candidate_url}?formats={media_selector['formats']}", **request_overrides)).raise_for_status(); pssh = min(re.findall(r"<cenc:pssh>(.+?)</cenc:pssh>", resp.text), key=len, default=None); result = (candidate_url, str(pssh) if pssh else None); break
             download_url, pssh_value = result; video_info.update(dict(download_url=download_url))
             release_pid, account = re.search(r"\|pid=(.*?)\|", raw_data['MANIFEST_URL_RESPONSE']).group(1), re.search(r"aid=(.*?)\|", raw_data['MANIFEST_URL_RESPONSE']).group(1)
             cdm, cdm_session_id, challenge = initcdm(pssh_value, WittyTVVideoClient.CDM_WVD_FILE_PATH)
-            (licence := self.post(WittyTVVideoClient.LICENSE_URL, data=challenge, params={'releasePid': release_pid, 'account': WittyTVVideoClient.ACCOUNT_URL.format(a_id=account), 'schema': '1.0', 'token': self.BEARER_TOKEN})).raise_for_status()
+            (licence := self.post(WittyTVVideoClient.LICENSE_URL, data=challenge, params={'releasePid': release_pid, 'account': WittyTVVideoClient.ACCOUNT_URL.format(a_id=account), 'schema': '1.0', 'token': self.BEARER_TOKEN}, **request_overrides)).raise_for_status()
             raw_data['LICENSE_URL_RESPONSE'] = licence.content; video_info.update(dict(raw_data=raw_data))
             key = list(set(closecdm(cdm, cdm_session_id, licence.content)))[0]
             cover_url = safeextractfromdict(raw_data, ['PROGRAM_URL_RESPONSE', 'thumbnails', 'image_horizontal_cover-704x396', 'url'], None)
-            video_info.update(dict(title=video_title, file_path=os.path.join(self.work_dir, self.source, f'{video_title}.{video_info.ext}'), identifier=content_id, nm3u8dlre_settings={'key': key}, cover_url=cover_url)); video_infos.append(video_info)
+            video_info.update(dict(title=video_title, save_path=os.path.join(self.work_dir, self.source, f'{video_title}.{video_info.ext}'), identifier=content_id, nm3u8dlre_settings=DownloadWithNM3U8DLRECommand.addkeyafterretry(key_value=key), cover_url=cover_url)); video_infos.append(video_info)
         except Exception as err:
             video_info.update(dict(err_msg=(err_msg := f'{self.source}.parsefromurl >>> {url} (Error: {err})'))); video_infos.append(video_info)
             self.logger_handle.error(err_msg, disable_print=self.disable_print)

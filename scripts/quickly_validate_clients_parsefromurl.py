@@ -11,7 +11,7 @@ from tqdm import tqdm
 from videodl.modules import VideoClientBuilder, BaseVideoClient
 
 
-'''constants'''
+'''settings'''
 VIDEODL_TEST_SAMPLES = {
     'WebMediaGrabber': [
         'https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video',
@@ -25,7 +25,7 @@ VIDEODL_TEST_SAMPLES = {
         'https://www.acfun.cn/v/ac36491489',
     ],
     'HaokanVideoClient': [
-        'https://haokan.baidu.com/v?vid=7754398076535398724',
+        'https://haokan.baidu.com/v?vid=15390752125208368436',
         'https://haokan.baidu.com/v?vid=7224830823778858146',
     ],
     'TedVideoClient': [
@@ -37,6 +37,7 @@ VIDEODL_TEST_SAMPLES = {
         'https://h5.ippzone.com/pp/post/870235406308?app=&did=d2bddf23159ae495&m=0cd13da8548a1bc85813d8c60d331e22&mid=1270840711117&pid=870235406308&share_count=1&type=post&zy_to=copy_link'
     ],
     'PipixVideoClient': [
+        'https://h5.pipix.com/s/OI2PNF-T0Mc/',
         'https://h5.pipix.com/item/6740623460659108107?app_id=1319&app=super&timestamp=1574241444&user_id=1085910221863021&carrier_region=cn&region=cn&language=zh&utm_source=weixin',
         'https://h5.pipix.com/item/6863294377570081027?app_id=1319&app=super&timestamp=1598011674&user_id=62108092335&carrier_region=cn&region=cn&language=zh&utm_source=weixin'
     ],
@@ -70,7 +71,7 @@ VIDEODL_TEST_SAMPLES = {
     'BaiduTiebaVideoClient': [
         'https://tieba.baidu.com/p/7280373361',
         'https://tieba.baidu.com/p/10253039554',
-        'https://tieba.baidu.com/p/10564767653',
+        'https://tieba.baidu.com/p/10196228633',
     ],
     'MGTVVideoClient': [
         'https://www.mgtv.com/l/100026064/19868457.html?fpa=1684&fpos=&lastp=ch_home&cpid=5',
@@ -91,7 +92,8 @@ VIDEODL_TEST_SAMPLES = {
     ],
     'MeipaiVideoClient': [
         'http://www.meipai.com/media/6995325250108940314',
-        'http://www.meipai.com/media/6983711035636086653'
+        'http://www.meipai.com/media/6983711035636086653',
+        'http://www.meipai.com/media/6987697906285039991',
     ],
     'DuxiaoshiVideoClient': [
         'http://quanmin.baidu.com/sv?source=share-h5&pd=qm_share_search&vid=12474281128791424380', 
@@ -134,10 +136,11 @@ VIDEODL_TEST_SAMPLES = {
         'https://weibo.com/tv/v/HApWK8FAc?fid=1034:4386795211940756',
     ],
     'RednoteVideoClient': [
-        'http://xhslink.com/o/A7MOvT2d4IM',
-        'http://xhslink.com/o/6us6UGep1Zw',
-        'http://xhslink.com/o/8t08X6dROt5',
-        'http://xhslink.com/o/1lB9dX0Vt2t',
+        'http://xhslink.com/o/90PTZaZuCvC',
+        'http://xhslink.com/o/5cHAeQspuEf',
+        'http://xhslink.com/o/69q4KGNdyG',
+        'http://xhslink.com/o/4GUbrB6dvLr',
+        'http://xhslink.com/o/7LmFimZYx8m',
     ],
     'CCTVVideoClient': [
         'https://v.cctv.com/2021/06/05/VIDEwn0n7VRJokIL7rBi2ink210605.shtml?spm=C90324.Pfdd0SYeqktv.Eri5TUDwaTXO.6',
@@ -205,7 +208,7 @@ VIDEODL_TEST_SAMPLES = {
         'https://open.163.com/newview/movie/free?pid=CGJTHROS9&mid=SGJTHVGI2',
     ],
     'CCtalkVideoClient': [
-        'https://www.cctalk.com/v/17604950351552?sid=1760494906733025',
+        'https://www.cctalk.com/v/16951079244174?sid=1695107820126253',
         'https://www.cctalk.com/v/17576427071521?sid='
     ],
     'KedouVideoClient': [
@@ -350,11 +353,6 @@ VIDEODL_TEST_SAMPLES = {
         'https://www.bilibili.com/video/BV1eQYwzwEz4',
         'https://ishare.ifeng.com/c/vs/v006uROwi--XAO9zMVtJUUewd8gnoa2qfWilMSzGxeoAPn7lWjN87mNtuzWQFWWXIvGIc?spss=np&crowdid=7355482289721053225&recallChannel=&aman=fgr0432r3rMfgMeQ04UODIR0Mj8M0N6TUyrNTBdkZjWYy1x00v',
     ],
-    'XZDXVideoClient': [
-        'https://www.bilibili.com/video/BV12oS5B5Eye/?spm_id_from=333.1007.tianma.6-4-22.click',
-        'https://www.douyin.com/jingxuan?modal_id=7585277829261151542',
-        'https://www.kuaishou.com/short-video/3xd8b4qa8vtn6ie?authorId=3xmup9yp228r3ze&streamSource=find&area=homexxbrilliant',
-    ],
     'PVVideoClient': [
         'https://www.youtube.com/watch?v=lBNYpPmjH8M',
         'https://www.bilibili.com/video/BV1vjmYBqETJ',
@@ -385,10 +383,6 @@ VIDEODL_TEST_SAMPLES = {
         'https://v.pptv.com/show/31nibfeVLuiclc2kI.html',
         'https://www.mgtv.com/b/292920/3592322.html',
     ],
-    'LvlongVideoClient': [
-        'https://v.qq.com/x/cover/hcx1ffsjpj63xuj/e0024mhahej.html',
-        'https://v.qq.com/x/cover/yg5drpt31xz2a1v/u4101uxlr02.html',
-    ],
     'ODwonVideoClient': [
         'https://www.bilibili.com/video/BV1abi9BfEZU',
         'https://www.douyin.com/video/6982497745948921092',
@@ -401,10 +395,6 @@ VIDEODL_TEST_SAMPLES = {
         'https://v.youku.com/v_show/id_XNjUxOTA0MzE4MA==.html',
         'https://www.mgtv.com/b/823245/24067596.html',
         'https://www.bilibili.com/bangumi/play/ss12548',
-    ],
-    'PlusFIFAVideoClient': [
-        "https://www.plus.fifa.com/en/player/580e692e-e8fc-4ad1-a649-5ec0af83f94d?catalogId=5f24e303-ff42-499f-9d7a-b4f8e0eff2ce",
-        "https://www.plus.fifa.com/en/content/fc-sochaux-montbeliard-vs-lb-chateauroux/6ff75563-c6fc-4b08-b324-54771dbd7029",
     ],
     'WittyTVVideoClient': [
         "https://www.wittytv.it/amici/giovedi-22-gennaio-il-quotidiano-di-amici/",
@@ -456,25 +446,150 @@ VIDEODL_TEST_SAMPLES = {
     ],
     'ABCVideoClient': [
         'https://www.abc.net.au/btn/classroom/wwi-centenary/10527914',
+        'https://www.abc.net.au/btn/classroom/climate-whiplash/106487762',
+        'https://www.abc.net.au/btn/classroom/roblox-safety/106351518',
         'https://www.abc.net.au/news/2023-06-25/wagner-boss-orders-troops-back-to-bases-to-avoid-bloodshed/102520540',
     ],
     'TBNUKVideoClient': [
-        "https://watch.tbn.uk/watch/replay/53253478",
         "https://watch.tbn.uk/watch/vod/52157303/identity-and-belonging",
         "https://watch.tbn.uk/shows/c171a631-ca92-4715-9df4-51567542481c/the-sessions-with-cynthia-garrett",
         "https://watch.tbn.uk/shows/906eb770-23de-4fc7-a369-e87167a5256d/praise-uk",
         "https://watch.tbn.uk/live/1197",
     ],
-    'WoofVideoClient': [
-        'https://www.instagram.com/reel/DWAGcteCVar/',
-        'https://bsky.app/profile/atrupar.com/post/3mhdmjwygsd2e',
-        'https://www.dailymotion.com/video/xa26uyo',
+    'SpapiVideoClient': [
+        'https://www.douyin.com/jingxuan?modal_id=7617448838516854050',
+        'https://www.kuaishou.com/short-video/3xnpsz4qp2hgy9k?authorId=3xvs4y8pb2ki74g&streamSource=samecity&area=homexxnearby',
+        'https://www.bilibili.com/video/BV1D5Q6BdEAM/',
     ],
-    'QwkunsVideoClient': [
-        'https://www.instagram.com/reel/DV6qXd0CVgB/',
-        'https://bsky.app/profile/atrupar.com/post/3mhdsmy4coo2p',
-        'https://www.tiktok.com/@marianpaulineflores/video/7617021651158387975',
-        'https://www.dailymotion.com/video/x9h93bs',
+    'JXM3U8VideoClient': [
+        'https://v.youku.com/v_show/id_XMzAzMDkyMjUyOA==.html',
+        'https://v.qq.com/x/cover/mzc00200rx67svy/q410050ws4m.html',
+        'https://www.iqiyi.com/v_xkt6z3z798.html',
+    ],
+    'PlayerPLVideoClient': [
+        "https://player.pl/filmy-online/1800-gramow,169874",
+        "https://player.pl/filmy-online/podatek-od-milosci,106758",
+        "https://player.pl/programy-online/power-couple-odcinki,29479/odcinek-3,S01E03,198875",
+        "https://player.pl/strefa-sport/motocyklicznie-odcinki,120/odcinek-4,S03E04,2063",
+        "https://player.pl/strefa-sport/krolowie-driftu-odcinki,118/odcinek-3,S01E03,2013",
+        "https://player.pl/seriale-online/pulapka-odcinki,13643", # 13 videos
+        "https://player.pl/programy-online/one-night-squad-odcinki,31426", # 10 videos
+    ],
+    'LeshiVideoClient': [
+        'https://www.le.com/ptv/vplay/78006876.html#vid=78006876',
+        'https://www.le.com/ptv/vplay/22011384.html',
+        'https://www.le.com/ptv/vplay/26322741.html',
+        'https://www.le.com/ptv/vplay/77974306.html',
+    ],
+    'VeedMateVideoClient': [
+        'https://www.youtube.com/watch?v=d006aGNWnic',
+        'https://www.tiktok.com/@nataliireynoldss/video/7615426833458236685',
+        'https://www.facebook.com/facebook/videos/how-it-feels-when-you-see-that-your-bestie-already-liked-the-reel-you-were-gonna/1507983703834653/',
+        'https://x.com/jushendo/status/2036224267084333475'
+    ],
+    'KanKanNewsVideoClient': [
+        'https://www.kankanews.com/detail/PbwRzE9qow4',
+        'https://www.kankanews.com/detail/ebyjZR5Lzy3',
+        'https://www.kankanews.com/detail/1W2v54r4zwA',
+    ],
+    'NuVidVideoClient': [
+        'https://www.nuvid.com/video/6513023/italian-babe',
+    ],
+    'ChinaDailyVideoClient': [
+        'https://www.chinadaily.com.cn/a/202604/07/WS69d4c582a310d6866eb42089.html',
+        'https://cnews.chinadaily.com.cn/a/202604/08/WS69d5d5b4a310942cc49a6b84.html',
+        'https://www.chinadaily.com.cn/a/202603/29/WS69c858cba310d6866eb40728.html',
+        'https://cn.chinadaily.com.cn/a/202604/02/WS69ce24d5a310942cc49a632e.html',
+    ],
+    'OrientalDailyVideoClient': [
+        'https://www.orientaldaily.com.my/news/videos/2026/05/21/820304',
+        'https://www.orientaldaily.com.my/news/videos/2026/05/24/820968',
+    ],
+    'CCTVNewsVideoClient': [
+        'https://content-static.cctvnews.cctv.com/snow-book/video.html?item_id=15184105708774284671',
+        'https://content-static.cctvnews.cctv.com/snow-book/index.html?item_id=7331185547682467513',
+    ],
+    'WWW163VideoClient': [
+        'https://www.163.com/v/video/VDHQNAVSD.html?clickfrom=video_like',
+        'https://www.163.com/v/video/VKP3BLEQV.html?clickfrom=video_hot',
+        'https://www.163.com/v/video/VIN2DAA00.html?clickfrom=video_like',
+    ],
+    'XinhuaNetVideoClient': [
+        'https://www.news.cn/fortune/20260409/01e2ba78799248769b889746e9a5bbe5/c.html',
+        'http://www.bj.xinhuanet.com/20251222/5452d059e00a4774ae94fe153cc15ef4/c.html',
+        'http://www.gx.news.cn/20260327/eaed509d04fa444b99a365136f079bd2/c.html',
+        'http://hn.news.cn/20250511/dc905b1e756c4b6f9514e58bc47c5afa/c.html',
+    ],
+    'PeopleVideoClient': [
+        'http://v.people.cn/n1/2026/0421/c431305-40705569.html',
+        'http://v.people.cn/n1/2022/0907/c447654-32521390.html',
+        'http://v.people.cn/n1/2026/0414/c431305-40701043.html',
+    ],
+    'HuanQiuVideoClient': [
+        'https://v.huanqiu.com/article/4RGKR80sTBx',
+        'https://v.huanqiu.com/article/4REgaSpSqxO',
+        'https://china.huanqiu.com/article/4RGHFASqx7S',
+    ],
+    'WzjunVideoClient': [
+        'https://www.douyin.com/jingxuan?modal_id=7605448430861849954',
+        'https://www.kuaishou.com/short-video/3xtnm8p6dqs8ud6?authorId=3xvs4y8pb2ki74g&streamSource=samecity&area=homexxnearby',
+        'https://www.bilibili.com/video/BV1RBoGBPEsL/?spm_id_from=333.1007.tianma.1-1-1.click',
+        'https://www.xiaohongshu.com/explore/69e47f74000000001a023684?xsec_token=ABY973bkanZ7HT65wULkpO9YDG77-1Kupes0JaHDayPDY=&xsec_source=pc_feed',
+    ],
+    'VThreadsVideoClient': [
+        'https://www.facebook.com/facebook/videos/me-directing-a-reel-for-my-bestie-video-and-music-by-julian-rad/846382125018055/',
+        'http://youtube.com/watch?v=xrUyk79DLbg&list=RDRkQy3NlG1eo&index=3',
+        'https://www.youtube.com/watch?v=RkQy3NlG1eo&list=RDRkQy3NlG1eo&start_radio=1',
+        'https://www.reddit.com/r/videos/comments/1sxqaov/jimmy_kimmel_defends_widow_joke_as_light_roast/',
+    ],
+    'MingpaoVideoClient': [
+        'https://news.mingpao.com/pns/%e5%89%af%e5%88%8a/article/20260428/s00005/1777310866112/%e6%96%b0%e8%88%88%e6%9d%bf%e7%b6%b2%e7%90%83%e6%98%93%e5%ad%b8%e9%9b%a3%e7%b2%be-%e3%80%8c%e7%a5%9e%e9%9a%8a%e5%8f%8b%e3%80%8d%e7%89%86%e7%b6%b2%e6%94%b9%e8%ae%8a%e7%90%83%e9%81%93%e8%87%b4%e5%8b%9d#goog_rewarded',
+        'https://ol.mingpao.com/ldy/showbiz/news/20260428/1777312630734/%e5%91%a8%e6%bd%a4%e7%99%bc%e5%8b%b8%e5%b0%91%e9%a3%b2%e9%85%92-%e6%a2%81%e5%ae%b6%e8%bc%9d%e6%89%81%e5%98%b4-%e3%80%8a%e5%af%92%e6%88%b01994%e3%80%8b%e9%a6%96%e6%98%a0%e5%8b%89%e5%8b%b5%e5%be%8c%e8%bc%a9-%e8%ae%9a%e9%83%ad%e5%af%8c%e5%9f%8e%e3%80%8c%e5%a5%bd%e9%9d%9a%e4%bb%94%e3%80%8d',
+        'https://ol.mingpao.com/ldy/showbiz/latest/20260428/1777371217643/edan%e6%bc%94%e6%b8%af%e7%89%88%e3%80%8a%e6%82%a0%e9%95%b7%e5%81%87%e6%9c%9f%e3%80%8b-%e7%90%86%e8%a7%a3%e7%b6%b2%e6%b0%91%e5%85%a9%e6%a5%b5%e5%8f%8d%e6%87%89-%e8%88%87jer%e6%85%b0%e5%95%8f%e9%98%bfmo%e5%ae%b6%e4%ba%ba',
+    ],
+    'DailyMotionVideoClient': [
+        'https://www.dailymotion.com/video/x9v9wsw',
+        'https://www.dailymotion.com/video/xa6wluq',
+        'https://www.dailymotion.com/video/x8ocv9e',
+    ],
+    'RutubeVideoClient': [
+        'https://rutube.ru/video/381e239f73b2d475bc0c2e459f531abb/',
+        'https://rutube.ru/video/3eac3b4561676c17df9132a9a1e62e3e/',
+        'https://rutube.ru/video/private/884fb55f07a97ab673c7d654553e0f48/?p=x2QojCumHTS3rsKHWXN8Lg',
+    ],
+    'IYFVideoClient': [
+        'https://www.iyf.tv/watch?v=F7Hbb4wwJY450xfmJBG2U0',
+        'https://www.iyf.tv/play/45oXXfbVIT3',
+        'https://www.iyf.tv/play/OI9OUij8EK2',
+        'https://www.iyf.tv/watch?v=tHqeI1Gd0HPfzUKzH27SwF',
+        'https://www.iyf.tv/watch?v=lOnWQAdqYDacpPTgywnKY2',
+    ],
+    'APICXVideoClient': [
+        'https://www.acfun.cn/v/ac48639303',
+        'https://www.kuaishou.com/short-video/3xa7xkt2ueynpz4?authorId=3x6av63hz3qnrnm&streamSource=samecity&area=homexxnearby',
+        'https://haokan.baidu.com/v?vid=2794203183592426331',
+        'https://www.douyin.com/jingxuan?modal_id=7650003584993512731',
+    ],
+    'QingQiuVideoClient': [
+        'https://www.bilibili.com/video/BV1efj96nEEM/',
+        'https://www.douyin.com/jingxuan?modal_id=7622143125963803958',
+        'https://www.tiktok.com/@tk021413z5p/video/7623055720631536927',
+    ],
+    'KuLeuVideoClient': [
+        'https://www.bilibili.com/video/BV13KV46cELP/?spm_id_from=333.1007.tianma.1-1-1.click',
+        'https://www.douyin.com/jingxuan?modal_id=7625608925320056100',
+        'https://www.kuaishou.com/short-video/3xwitcvkzj7z5c2?authorId=3x8xpehau4wybq6&streamSource=samecity&area=homexxnearby',
+    ],
+    'JisuYunVideoClient': [
+        'https://www.iqiyi.com/v_tenslt1rzg.html',
+    ],
+    'NewsPicksVideoClient': [
+        'https://newspicks.com/movie-series/11/?movieId=1813',
+        'https://newspicks.com/movie-series/158/?movieId=3932'
+    ],
+    'MyVideoGeVideoClient': [
+        'https://www.myvideo.ge/v/3941048',
+        'https://www.myvideo.ge/v/4352862',
     ],
 }
 
@@ -488,8 +603,8 @@ def main(save_path='test_results.pkl'):
         num_valid = 0
         for candidate_url in tqdm(VIDEODL_TEST_SAMPLES[client_name]):
             video_info = client.parsefromurl(candidate_url)[0]
-            status = {"name": client_name, "ok": False, "error_msg": None, "test_url": candidate_url, "parse_result": video_info}
-            if video_info['download_url'] == 'NULL' or not video_info['download_url'] or video_info['err_msg'] != 'NULL':
+            status = {"name": client_name, "ok": False, "error_msg": None, "test_url": candidate_url, "parse_result": video_info.todict()}
+            if not video_info.with_valid_download_url:
                 status.update(dict(error_msg=video_info['err_msg'], ok=False))
             else:
                 num_valid += 1

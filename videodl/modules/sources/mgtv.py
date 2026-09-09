@@ -34,7 +34,7 @@ class MGTVVideoClient(BaseVideoClient):
         page = DrissionPageUtils.initsmartbrowser(headless=True, requests_headers=None, requests_proxies=(request_overrides.get('proxies') or self._autosetproxies()), requests_cookies=(request_overrides.get('cookies') or self.default_cookies))
         page.get(url="https://www.mgtv.com/b/790878/23777554.html?fpa=1217&fpos=&lastp=ch_home")
         page.ele('xpath://script[contains(text(), "window.__NUXT__")]')
-        cookies = DrissionPageUtils.getcookiesdict(page=page); page.quit()
+        cookies = DrissionPageUtils.getcookiesdict(page=page); DrissionPageUtils.quitpage(page=page)
         return cookies2string(cookies)
     '''parsefromurl'''
     @useparseheaderscookies
@@ -46,7 +46,7 @@ class MGTVVideoClient(BaseVideoClient):
         try:
             # --basic information
             vid = urlparse(url).path.strip('/').split('/')[-1]; pno, did = '1030', 'e6e13014-393b-43e7-b6be-2323e4960939'
-            tk2 = bytes(f'did={did}|pno={pno}|ver=0.3.0301|clit={int(time.time())}'.encode()); tk2 = base64.b64encode(tk2).decode().replace('/\+/g', '_').replace('/\//g', '~').replace('/=/g', '-'); tk2 = list(' '.join(tk2).split()); tk2.reverse()
+            tk2 = bytes(f'did={did}|pno={pno}|ver=0.3.0301|clit={int(time.time())}'.encode()); tk2 = base64.b64encode(tk2).decode().replace('+', '_').replace('/', '~').replace('=', '-'); tk2 = list(' '.join(tk2).split()); tk2.reverse()
             params = {'did': did, 'suuid': uuid.uuid4(), 'cxid': '', 'tk2': ''.join(tk2), 'type': 'pch5', 'video_id': vid, '_support': '10000000', 'auth_mode': '', 'src': '', 'abroad': ''}
             (resp := self.get('https://pcweb.api.mgtv.com/player/video', params=params, **request_overrides)).raise_for_status(); raw_data = resp2json(resp=resp)
             # --sources
@@ -58,14 +58,14 @@ class MGTVVideoClient(BaseVideoClient):
             download_url = raw_data['getSource']['data']['stream_domain'][0] + max(streams, key=lambda s: int(s.get("filebitrate", 0)))['url']; video_info.update(dict(download_url=download_url))
             video_title = legalizestring(safeextractfromdict(raw_data, ['data', 'info', 'title'], None) or null_backup_title, replace_null_string=null_backup_title).removesuffix('.')
             guess_video_ext_result = FileTypeSniffer.getfileextensionfromurl(url=download_url, headers=self.default_download_headers, request_overrides=request_overrides, cookies=self.default_download_cookies)
-            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info['ext']
+            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info.ext
             if guess_video_ext_result['ext'] in {'json', 'NULL', None, 'null', 'None'}:
                 (resp := self.get(download_url, **request_overrides)).raise_for_status()
                 video_info.update(dict(download_url=(download_url := resp2json(resp=resp)['info'])))
                 guess_video_ext_result = FileTypeSniffer.getfileextensionfromurl(url=download_url, headers=self.default_download_headers, request_overrides=request_overrides, cookies=self.default_download_cookies)
-                ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info['ext']
+                ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info.ext
             cover_url = safeextractfromdict(raw_data, ['data', 'info', 'thumb'], None)
-            video_info.update(dict(title=video_title, file_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=cover_url))
+            video_info.update(dict(title=video_title, save_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=cover_url))
         except Exception as err:
             video_info.update(dict(err_msg=(err_msg := f'{self.source}.parsefromurl >>> {url} (Error: {err})')))
             self.logger_handle.error(err_msg, disable_print=self.disable_print)

@@ -58,15 +58,17 @@
 
 # 🆕 What's New
 
-- 2026-03-23: Released videofetch v0.7.0 - removed Playwright-related dependencies and replaced them with DrissionPage; improved support for parsing and downloading videos from platforms such as Xinpianchang and Kuaishou; added multiple general-purpose video parsers and downloaders; fixed several known bugs.
-- 2026-03-13: Released videofetch v0.6.8 - added video parsing and downloading support for two new sites, namely, "watch.tbn.uk" and "www.abc.net.au"; optimized the implementation of "VideoInfo" data class to make IDE usage more convenient; fixed several known bugs.
-- 2026-03-09: Released videofetch v0.6.7 - added a general video parser; added support for downloading videos from beacon.tv; fixed the issue where videos on Weibo might fail to download due to possible anti-leech protection; and resolved some potential bugs.
+- 2026-06-26: Released videofetch v0.9.1 - added support for video parsing and downloading from myvideo.ge and newspicks.com; removed the web interface for Meipai video parsing and switched to the app interface.
+- 2026-06-26: Released videofetch v0.9.0 - for the common video client, fix all broken video clients, remove APIs that no longer provide free parsing services, and add multiple general-purpose video parsing interfaces; for platform-specific clients, remove support for dead sites and fix some broken APIs.
+- 2026-05-25: Released videofetch v0.8.9 - remove support for the eastday.com site; add video parsing and download support for the Malaysian Oriental Daily News and iYF.tv sites.
 
 
 # 🚀 Introduction
 
-A fast and lightweight video downloader built entirely in Python! 🚀 
-If you find this project useful, don't forget to star the repository and help us grow—your support means the world! 🙌
+A fast, lightweight, and fully Python-based video downloader built for simplicity, efficiency, and flexibility. 🚀
+Whether used in academic research to collect and organize video data for dataset construction, in development workflows for multimedia processing pipelines, or in personal projects to save online videos for offline access where permitted, this project provides a clean and practical solution without unnecessary bloat.
+With an easy-to-understand Python codebase and lightweight design, it is suitable both for direct use and for further extension in custom applications.
+If this project helps with work, research, or everyday use, please consider giving it a star ⭐ — your support helps more people discover the project and motivates future improvements. 🙌
 
 
 # 📜 Statement
@@ -81,62 +83,78 @@ If any content in this repository causes concerns or infringes on copyright, ple
 
 The video platforms currently supported for parsing are,
 
-| Category                                               | VideoClient (EN)                      | VideoClient (CN)                   | ParseURL  | Download | Core Code                                                                                                          |
-| :--                                                    | :--                                   | :--                                | :--:      | :--:     | :--                                                                                                                |
-| **Chinese Platforms**                                  | AcFunVideoClient                      | A站                                | ✔️        | ✔️       | [acfun.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/acfun.py)                 |
-|                                                        | BaiduTiebaVideoClient                 | 百度贴吧                           | ✔️        | ✔️       | [baidutieba.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/baidutieba.py)       |
-|                                                        | BilibiliVideoClient                   | 哔哩哔哩 (B站)                     | ✔️        | ✔️       | [bilibili.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/bilibili.py)           |
-|                                                        | C56VideoClient                        | 56视频网                           | ✔️        | ✔️       | [c56.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/c56.py)                     |
-|                                                        | CCTVVideoClient                       | 央视网                             | ✔️        | ✔️       | [cctv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/cctv.py)                   |
-|                                                        | CCtalkVideoClient                     | CCtalk                             | ✔️        | ✔️       | [cctalk.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/cctalk.py)               |
-|                                                        | DuxiaoshiVideoClient                  | 度小视 (全民小视频)                | ✔️        | ✔️       | [duxiaoshi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/duxiaoshi.py)         |
-|                                                        | DouyinVideoClient                     | 抖音视频                           | ✔️        | ✔️       | [douyin.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/douyin.py)               |
-|                                                        | DongchediVideoClient                  | 懂车帝                             | ✔️        | ✔️       | [dongchedi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/dongchedi.py)         |
-|                                                        | EyepetizerVideoClient                 | 开眼视频                           | ✔️        | ✔️       | [eyepetizer.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/eyepetizer.py)       |
-|                                                        | HaokanVideoClient                     | 好看视频                           | ✔️        | ✔️       | [haokan.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/haokan.py)               |
-|                                                        | HuyaVideoClient                       | 虎牙视频                           | ✔️        | ✔️       | [huya.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/huya.py)                   |
-|                                                        | IQiyiVideoClient                      | 爱奇艺                             | ✔️        | ✔️       | [iqiyi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/iqiyi.py)                 |
-|                                                        | Ku6VideoClient                        | 酷6网                              | ✔️        | ✔️       | [ku6.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/ku6.py)                     |
-|                                                        | KuaishouVideoClient                   | 快手                               | ✔️        | ✔️       | [kuaishou.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/kuaishou.py)           |
-|                                                        | KugouMVVideoClient                    | 酷狗音乐MV                         | ✔️        | ✔️       | [kugoumv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/kugoumv.py)             |
-|                                                        | MeipaiVideoClient                     | 美拍                               | ✔️        | ✔️       | [meipai.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/meipai.py)               |
-|                                                        | MGTVVideoClient                       | 芒果TV                             | ✔️        | ✔️       | [mgtv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/mgtv.py)                   |
-|                                                        | M1905VideoClient                      | 1905电影网                         | ✔️        | ✔️       | [m1905.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/m1905.py)                 |
-|                                                        | OasisVideoClient                      | 新浪绿洲                           | ✔️        | ✔️       | [oasis.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/oasis.py)                 |
-|                                                        | Open163VideoClient                    | 网易公开课                         | ✔️        | ✔️       | [open163.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/open163.py)             |
-|                                                        | PearVideoClient                       | 梨视频                             | ✔️        | ✔️       | [pear.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/pear.py)                   |
-|                                                        | PipigaoxiaoVideoClient                | 皮皮搞笑                           | ✔️        | ✔️       | [pipigaoxiao.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/pipigaoxiao.py)     |
-|                                                        | PipixVideoClient                      | 皮皮虾                             | ✔️        | ✔️       | [pipix.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/pipix.py)                 |
-|                                                        | RednoteVideoClient                    | 小红书                             | ✔️        | ✔️       | [rednote.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/rednote.py)             |
-|                                                        | SinaVideoClient                       | 新浪视频                           | ✔️        | ✔️       | [sina.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/sina.py)                   |
-|                                                        | SixRoomVideoClient                    | 六间房视频                         | ✔️        | ✔️       | [sixroom.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/sixroom.py)             |
-|                                                        | SohuVideoClient                       | 搜狐视频                           | ✔️        | ✔️       | [sohu.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/sohu.py)                   |
-|                                                        | TencentVideoClient                    | 腾讯视频                           | ✔️        | ✔️       | [tencent.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/tencent.py)             |
-|                                                        | WeiboVideoClient                      | 微博视频                           | ✔️        | ✔️       | [weibo.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/weibo.py)                 |
-|                                                        | WeishiVideoClient                     | 微视                               | ✔️        | ✔️       | [weishi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/weishi.py)               |
-|                                                        | WeSingVideoClient                     | 全民K歌                            | ✔️        | ✔️       | [wesing.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/wesing.py)               |
-|                                                        | XiguaVideoClient                      | 西瓜视频                           | ✔️        | ✔️       | [xigua.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/xigua.py)                 |
-|                                                        | XinpianchangVideoClient               | 新片场                             | ✔️        | ✔️       | [xinpianchang.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/xinpianchang.py)   |
-|                                                        | XuexiCNVideoClient                    | 学习强国                           | ✔️        | ✔️       | [xuexicn.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/xuexicn.py)             |
-|                                                        | YoukuVideoClient                      | 优酷视频                           | ✔️        | ✔️       | [youku.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/youku.py)                 |
-|                                                        | YinyuetaiVideoClient                  | 音悦台 (关停ing😭)                 | ✔️        | ✔️       | [yinyuetai.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/yinyuetai.py)         |
-|                                                        | ZhihuVideoClient                      | 知乎视频                           | ✔️        | ✔️       | [zhihu.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/zhihu.py)                 |
-|                                                        | ZuiyouVideoClient                     | 最右                               | ✔️        | ✔️       | [zuiyou.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/zuiyou.py)               |
-| **Overseas Platforms**                                 | ArteTVVideoClient                     | 德法公共电视网                     | ✔️        | ✔️       | [artetv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/artetv.py)               |
-|                                                        | ABCVideoClient                        | 澳大利亚广播公司                   | ✔️        | ✔️       | [abc.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/abc.py)                     |
-|                                                        | BeaconVideoClient                     | BeaconTV                           | ✔️        | ✔️       | [beacon.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/beacon.py)               |
-|                                                        | CCCVideoClient                        | CCC视频 (黑客大会视频)             | ✔️        | ✔️       | [ccc.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/ccc.py)                     |
-|                                                        | FoxNewsVideoClient                    | 福克斯新闻                         | ✔️        | ✔️       | [foxnews.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/foxnews.py)             |
-|                                                        | PlusFIFAVideoClient                   | FIFA+平台 (国际足联+)              | ✔️        | ✔️       | [plusfifa.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/plusfifa.py)           |
-|                                                        | GeniusVideoClient                     | Rap Genius (嘻哈百科)              | ✔️        | ✔️       | [genius.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/genius.py)               |
-|                                                        | KakaoVideoClient                      | KakaoTV                            | ✔️        | ✔️       | [kakao.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/kakao.py)                 |
-|                                                        | RedditVideoClient                     | 红迪网                             | ✔️        | ✔️       | [reddit.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/reddit.py)               |
-|                                                        | TBNUKVideoClient                      | 英国三一电视台点播网站             | ✔️        | ✔️       | [tbnuk.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/tbnuk.py)                 |
-|                                                        | TedVideoClient                        | TED视频                            | ✔️        | ✔️       | [ted.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/ted.py)                     |
-|                                                        | UnityVideoClient                      | Unity                              | ✔️        | ✔️       | [unity.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/unity.py)                 |
-|                                                        | WWEVideoClient                        | 世界摔角娱乐                       | ✔️        | ✔️       | [wwe.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/wwe.py)                     |
-|                                                        | WittyTVVideoClient                    | Witty TV (意大利多媒体娱乐平台)    | ✔️        | ✔️       | [wittytv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/wittytv.py)             |
-|                                                        | YouTubeVideoClient                    | 油管视频                           | ✔️        | ✔️       | [youtube.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/youtube.py)             |
+| Category                                               | VideoClient (EN)                                                                                       | VideoClient (CN)                                                                              | ParseURL  | Download | Core Code                                                                                                          |
+| :--                                                    | :--                                                                                                    | :--                                                                                           | :--:      | :--:     | :--                                                                                                                |
+| **Chinese Platforms**                                  | [AcFunVideoClient](https://www.acfun.cn)                                                               | [A站](https://www.acfun.cn)                                                                   | ✔️        | ✔️       | [acfun.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/acfun.py)                 |
+|                                                        | [BaiduTiebaVideoClient](https://tieba.baidu.com/)                                                      | [百度贴吧](https://tieba.baidu.com/)                                                          | ✔️        | ✔️       | [baidutieba.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/baidutieba.py)       |
+|                                                        | [BilibiliVideoClient](https://www.bilibili.com/)                                                       | [哔哩哔哩 (B站)](https://www.bilibili.com/)                                                   | ✔️        | ✔️       | [bilibili.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/bilibili.py)           |
+|                                                        | [C56VideoClient](https://www.56.com/)                                                                  | [56视频网](https://www.56.com/)                                                               | ✔️        | ✔️       | [c56.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/c56.py)                     |
+|                                                        | [CCTVVideoClient](https://tv.cctv.com/)                                                                | [央视网](https://tv.cctv.com/)                                                                | ✔️        | ✔️       | [cctv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/cctv.py)                   |
+|                                                        | [CCTVNewsVideoClient](https://news.cctv.com/china/)                                                    | [央视新闻](https://news.cctv.com/china/)                                                      | ✔️        | ✔️       | [cctvnews.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/cctvnews.py)           |
+|                                                        | [CCtalkVideoClient](https://www.cctalk.com/)                                                           | [CCtalk](https://www.cctalk.com/)                                                             | ✔️        | ✔️       | [cctalk.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/cctalk.py)               |
+|                                                        | [ChinaDailyVideoClient](https://cn.chinadaily.com.cn/)                                                 | [中国日报网](https://cn.chinadaily.com.cn/)                                                   | ✔️        | ✔️       | [chinadaily.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/chinadaily.py)       |
+|                                                        | [DuxiaoshiVideoClient](https://xspshare.baidu.com/)                                                    | [度小视 (全民小视频)](https://xspshare.baidu.com/)                                            | ✔️        | ✔️       | [duxiaoshi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/duxiaoshi.py)         |
+|                                                        | [DouyinVideoClient](https://www.douyin.com/)                                                           | [抖音视频](https://www.douyin.com/)                                                           | ✔️        | ✔️       | [douyin.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/douyin.py)               |
+|                                                        | [DongchediVideoClient](https://www.dongchedi.com/)                                                     | [懂车帝](https://www.dongchedi.com/)                                                          | ✔️        | ✔️       | [dongchedi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/dongchedi.py)         |
+|                                                        | [EyepetizerVideoClient](https://home.eyepetizer.net/)                                                  | [开眼视频](https://home.eyepetizer.net/)                                                      | ✔️        | ✔️       | [eyepetizer.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/eyepetizer.py)       |
+|                                                        | [HaokanVideoClient](https://haokan.baidu.com/)                                                         | [好看视频](https://haokan.baidu.com/)                                                         | ✔️        | ✔️       | [haokan.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/haokan.py)               |
+|                                                        | [HuyaVideoClient](https://www.huya.com/)                                                               | [虎牙视频](https://www.huya.com/)                                                             | ✔️        | ✔️       | [huya.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/huya.py)                   |
+|                                                        | [HuanQiuVideoClient](https://www.huanqiu.com/)                                                         | [环球网](https://www.huanqiu.com/)                                                            | ✔️        | ✔️       | [huanqiu.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/huanqiu.py)             |
+|                                                        | [IQiyiVideoClient](https://www.iqiyi.com/)                                                             | [爱奇艺](https://www.iqiyi.com/)                                                              | ✔️        | ✔️       | [iqiyi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/iqiyi.py)                 |
+|                                                        | [Ku6VideoClient](https://www.ku6.com/)                                                                 | [酷6网](https://www.ku6.com/)                                                                 | ✔️        | ✔️       | [ku6.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/ku6.py)                     |
+|                                                        | [KuaishouVideoClient](https://www.kuaishou.com/)                                                       | [快手](https://www.kuaishou.com/)                                                             | ✔️        | ✔️       | [kuaishou.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/kuaishou.py)           |
+|                                                        | [KugouMVVideoClient](https://www.kugou.com/mvweb/html/)                                                | [酷狗音乐MV](https://www.kugou.com/mvweb/html/)                                               | ✔️        | ✔️       | [kugoumv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/kugoumv.py)             |
+|                                                        | [KanKanNewsVideoClient](https://www.kankanews.com/)                                                    | [看看新闻](https://www.kankanews.com/)                                                        | ✔️        | ✔️       | [kankannews.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/kankannews.py)       |
+|                                                        | [LeshiVideoClient](https://www.le.com/)                                                                | [乐视视频](https://www.le.com/)                                                               | ✔️        | ✔️       | [leshi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/leshi.py)                 |
+|                                                        | [MeipaiVideoClient](https://www.meipai.com/)                                                           | [美拍](https://www.meipai.com/)                                                               | ✔️        | ✔️       | [meipai.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/meipai.py)               |
+|                                                        | [MGTVVideoClient](https://www.mgtv.com/)                                                               | [芒果TV](https://www.mgtv.com/)                                                               | ✔️        | ✔️       | [mgtv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/mgtv.py)                   |
+|                                                        | [M1905VideoClient](https://www.1905.com/)                                                              | [1905电影网](https://www.1905.com/)                                                           | ✔️        | ✔️       | [m1905.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/m1905.py)                 |
+|                                                        | [MingpaoVideoClient](https://www.mingpao.com/)                                                         | [明报](https://www.mingpao.com/)                                                              | ✔️        | ✔️       | [mingpao.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/mingpao.py)             |
+|                                                        | [OasisVideoClient](https://m.oasis.weibo.cn/v1/h5/share?uid=1642632024&luicode=10000012&lfid=hyhp_lz)  | [新浪绿洲](https://m.oasis.weibo.cn/v1/h5/share?uid=1642632024&luicode=10000012&lfid=hyhp_lz) | ✔️        | ✔️       | [oasis.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/oasis.py)                 |
+|                                                        | [Open163VideoClient](https://open.163.com/)                                                            | [网易公开课](https://open.163.com/)                                                           | ✔️        | ✔️       | [open163.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/open163.py)             |
+|                                                        | [PearVideoClient](https://www.pearvideo.com/)                                                          | [梨视频](https://www.pearvideo.com/)                                                          | ✔️        | ✔️       | [pear.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/pear.py)                   |
+|                                                        | [PipigaoxiaoVideoClient](https://www.pipigx.com/)                                                      | [皮皮搞笑](https://www.pipigx.com/)                                                           | ✔️        | ✔️       | [pipigaoxiao.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/pipigaoxiao.py)     |
+|                                                        | [PipixVideoClient](https://www.pipix.com/)                                                             | [皮皮虾](https://www.pipix.com/)                                                              | ✔️        | ✔️       | [pipix.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/pipix.py)                 |
+|                                                        | [PeopleVideoClient](https://www.people.com.cn/)                                                        | [人民网](https://www.people.com.cn/)                                                          | ✔️        | ✔️       | [people.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/people.py)               |
+|                                                        | [RednoteVideoClient](https://www.xiaohongshu.com/explore)                                              | [小红书](https://www.xiaohongshu.com/explore)                                                 | ✔️        | ✔️       | [rednote.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/rednote.py)             |
+|                                                        | [SinaVideoClient](http://video.sina.com.cn/)                                                           | [新浪视频](http://video.sina.com.cn/)                                                         | ✔️        | ✔️       | [sina.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/sina.py)                   |
+|                                                        | [SixRoomVideoClient](https://v.6.cn/)                                                                  | [六间房视频](https://v.6.cn/)                                                                 | ✔️        | ✔️       | [sixroom.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/sixroom.py)             |
+|                                                        | [SohuVideoClient](https://tv.sohu.com/)                                                                | [搜狐视频](https://tv.sohu.com/)                                                              | ✔️        | ✔️       | [sohu.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/sohu.py)                   |
+|                                                        | [TencentVideoClient](https://v.qq.com/)                                                                | [腾讯视频](https://v.qq.com/)                                                                 | ✔️        | ✔️       | [tencent.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/tencent.py)             |
+|                                                        | [WeiboVideoClient](https://weibo.com)                                                                  | [微博视频](https://weibo.com)                                                                 | ✔️        | ✔️       | [weibo.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/weibo.py)                 |
+|                                                        | [WeishiVideoClient](https://isee.weishi.qq.com/)                                                       | [微视](https://isee.weishi.qq.com/)                                                           | ✔️        | ✔️       | [weishi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/weishi.py)               |
+|                                                        | [WeSingVideoClient](https://kg.qq.com/index-pc.html)                                                   | [全民K歌](https://kg.qq.com/index-pc.html)                                                    | ✔️        | ✔️       | [wesing.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/wesing.py)               |
+|                                                        | [WWW163VideoClient](https://www.163.com/)                                                              | [网易新闻](https://www.163.com/)                                                              | ✔️        | ✔️       | [www163.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/www163.py)               |
+|                                                        | [XiguaVideoClient](https://www.ixigua.com/)                                                            | [西瓜视频](https://www.ixigua.com/)                                                           | ✔️        | ✔️       | [xigua.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/xigua.py)                 |
+|                                                        | [XinpianchangVideoClient](https://www.xinpianchang.com/)                                               | [新片场](https://www.xinpianchang.com/)                                                       | ✔️        | ✔️       | [xinpianchang.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/xinpianchang.py)   |
+|                                                        | [XuexiCNVideoClient](https://www.xuexi.cn/)                                                            | [学习强国](https://www.xuexi.cn/)                                                             | ✔️        | ✔️       | [xuexicn.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/xuexicn.py)             |
+|                                                        | [XinhuaNetVideoClient](https://www.news.cn/)                                                           | [新华网](https://www.news.cn/)                                                                | ✔️        | ✔️       | [xinhuanet.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/xinhuanet.py)         |
+|                                                        | [YoukuVideoClient](https://www.youku.com/)                                                             | [优酷视频](https://www.youku.com/)                                                            | ✔️        | ✔️       | [youku.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/youku.py)                 |
+|                                                        | [YinyuetaiVideoClient](https://www.yinyuetai.com/)                                                     | [音悦台 (关停ing)](https://www.yinyuetai.com/)                                                | ✔️        | ✔️       | [yinyuetai.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/yinyuetai.py)         |
+|                                                        | [ZhihuVideoClient](https://www.zhihu.com/)                                                             | [知乎视频](https://www.zhihu.com/)                                                            | ✔️        | ✔️       | [zhihu.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/zhihu.py)                 |
+|                                                        | [ZuiyouVideoClient](https://share.xiaochuankeji.cn/home)                                               | [最右](https://share.xiaochuankeji.cn/home)                                                   | ✔️        | ✔️       | [zuiyou.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/zuiyou.py)               |
+| **Overseas Platforms**                                 | [ArteTVVideoClient](https://www.arte.tv/en/)                                                           | [德法公共电视网](https://www.arte.tv/en/)                                                     | ✔️        | ✔️       | [artetv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/artetv.py)               |
+|                                                        | [ABCVideoClient](https://www.abc.net.au/)                                                              | [澳大利亚广播公司](https://www.abc.net.au/)                                                   | ✔️        | ✔️       | [abc.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/abc.py)                     |
+|                                                        | [BeaconVideoClient](https://beacon.tv/)                                                                | [BeaconTV](https://beacon.tv/)                                                                | ✔️        | ✔️       | [beacon.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/beacon.py)               |
+|                                                        | [CCCVideoClient](https://media.ccc.de/)                                                                | [CCC视频 (黑客大会视频)](https://media.ccc.de/)                                               | ✔️        | ✔️       | [ccc.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/ccc.py)                     |
+|                                                        | [DailyMotionVideoClient](https://www.dailymotion.com/)                                                 | [每日影像](https://www.dailymotion.com/)                                                      | ✔️        | ✔️       | [dailymotion.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/dailymotion.py)     |
+|                                                        | [FoxNewsVideoClient](https://www.foxnews.com/)                                                         | [福克斯新闻](https://www.foxnews.com/)                                                        | ✔️        | ✔️       | [foxnews.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/foxnews.py)             |
+|                                                        | [GeniusVideoClient](https://genius.com/)                                                               | [Rap Genius (嘻哈百科)](https://genius.com/)                                                  | ✔️        | ✔️       | [genius.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/genius.py)               |
+|                                                        | [IYFVideoClient](https://www.iyf.tv/)                                                                  | [爱壹帆](https://www.iyf.tv/)                                                                 | ✔️        | ✔️       | [iyf.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/iyf.py)                     |
+|                                                        | [KakaoVideoClient](https://tv.kakao.com/)                                                              | [KakaoTV](https://tv.kakao.com/)                                                              | ✔️        | ✔️       | [kakao.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/kakao.py)                 |
+|                                                        | [MyVideoGeVideoClient](https://www.myvideo.ge/)                                                        | [MYVIDEO.GE](https://www.myvideo.ge/)                                                         | ✔️        | ✔️       | [myvideoge.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/myvideoge.py)         |
+|                                                        | [NuVidVideoClient](https://www.nuvid.com/)                                                             | [NuVid.com](https://www.nuvid.com/)                                                           | ✔️        | ✔️       | [nuvid.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/nuvid.py)                 |
+|                                                        | [NewsPicksVideoClient](https://newspicks.com/)                                                         | [NewsPicks](https://newspicks.com/)                                                           | ✔️        | ✔️       | [newspicks.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/newspicks.py)         |
+|                                                        | [OrientalDailyVideoClient](https://www.orientaldaily.com.my/)                                          | [马来西亚东方日报](https://www.orientaldaily.com.my/)                                         | ✔️        | ✔️       | [orientaldaily.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/orientaldaily.py) |
+|                                                        | [PlayerPLVideoClient](https://player.pl/international)                                                 | [Player.pl (波兰流行视频点播站)](https://player.pl/international)                             | ✔️        | ✔️       | [playerpl.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/playerpl.py)           |
+|                                                        | [RedditVideoClient](https://www.reddit.com/)                                                           | [红迪网](https://www.reddit.com/)                                                             | ✔️        | ✔️       | [reddit.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/reddit.py)               |
+|                                                        | [RutubeVideoClient](https://rutube.ru/)                                                                | [俄罗斯版 YouTube](https://rutube.ru/)                                                        | ✔️        | ✔️       | [rutube.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/rutube.py)               |
+|                                                        | [TBNUKVideoClient](https://watch.tbn.uk/)                                                              | [英国三一电视台点播网站](https://watch.tbn.uk/)                                               | ✔️        | ✔️       | [tbnuk.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/tbnuk.py)                 |
+|                                                        | [TedVideoClient](https://www.ted.com/)                                                                 | [TED视频](https://www.ted.com/)                                                               | ✔️        | ✔️       | [ted.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/ted.py)                     |
+|                                                        | [UnityVideoClient](https://unity.com/)                                                                 | [Unity](https://unity.com/)                                                                   | ✔️        | ✔️       | [unity.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/unity.py)                 |
+|                                                        | [WWEVideoClient](https://www.wwe.com/)                                                                 | [世界摔角娱乐](https://www.wwe.com/)                                                          | ✔️        | ✔️       | [wwe.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/wwe.py)                     |
+|                                                        | [WittyTVVideoClient](https://www.wittytv.it/)                                                          | [Witty TV (意大利多媒体娱乐平台)](https://www.wittytv.it/)                                    | ✔️        | ✔️       | [wittytv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/wittytv.py)             |
+|                                                        | [YouTubeVideoClient](https://www.youtube.com/)                                                         | [油管视频](https://www.youtube.com/)                                                          | ✔️        | ✔️       | [youtube.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/sources/youtube.py)             |
 
 To make videodl more robust and able to adaptively parse videos from more websites, even when the video URL is not in the supported list above, 
 I also plan to gradually add some general-purpose parsing interfaces. The currently supported generic parsers include,
@@ -144,35 +162,39 @@ I also plan to gradually add some general-purpose parsing interfaces. The curren
 | CommonVideoClient (EN)                                            | CommonVideoClient (CN)                                                  | ParseURL | Download | Core Code                                                                                                   |
 | :--------------------------------------------------------------   | :-------------------------------------------------------------          | :-----:  | :-----:  | :---------------------------------------------------------------------------------------------------------- |
 | [AnyFetcherVideoClient](https://anyfetcher.com/zh-cn)             | [万能视频下载器](https://anyfetcher.com/zh-cn)                          |   ✔️     |   ✔️     | [anyfetcher.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/anyfetcher.py) |
+| [APICXVideoClient](https://apicx.asia/doc/video_parse_api)        | [残像聚合视频解析](https://apicx.asia/doc/video_parse_api)              |   ✔️     |   ✔️     | [apicx.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/apicx.py)           |
 | [BVVideoClient](https://www.bestvideow.com/xhs)                   | [BestVideo下载器](https://www.bestvideow.com/xhs)                       |   ✔️     |   ✔️     | [bv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/bv.py)                 |
 | [BugPkVideoClient](https://sv.bugpk.com/)                         | [短视频解析工具](https://sv.bugpk.com/)                                 |   ✔️     |   ✔️     | [bugpk.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/bugpk.py)           |
 | [GVVideoClient](https://greenvideo.cc/)                           | [GreenVideo视频下载](https://greenvideo.cc/)                            |   ✔️     |   ✔️     | [gv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/gv.py)                 |
 | [GVVIPVideoClient](https://greenvideo.cc/video/vip)               | [GreenVideoVIP视频解析](https://greenvideo.cc/video/vip)                |   ✔️     |   ✔️     | [gvvip.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/gvvip.py)           |
 | [IIILabVideoClient](https://roar.iiilab.com/)                     | [兽音译者](https://roar.iiilab.com/)                                    |   ✔️     |   ✔️     | [iiilab.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/iiilab.py)         |
 | [IM1907VideoClient](https://im1907.top/)                          | [IM1907电影解析网](https://im1907.top/)                                 |   ✔️     |   ✔️     | [im1907.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/im1907.py)         |
+| [JXM3U8VideoClient](https://jx.m3u8.tv/jiexi/?url=)               | [M3U8.TV解析](https://jx.m3u8.tv/jiexi/?url=)                           |   ✔️     |   ✔️     | [jxm3u8.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/jxm3u8.py)         |
+| [JisuYunVideoClient](https://jx.2s0.cn/player/?url=)              | [极速云解析](https://jx.2s0.cn/player/?url=)                            |   ✔️     |   ✔️     | [jisuyun.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/jisuyun.py)       |
 | [KedouVideoClient](https://www.kedou.life/)                       | [Kedou视频解析](https://www.kedou.life/)                                |   ✔️     |   ✔️     | [kedou.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/kedou.py)           |
 | [KuKuToolVideoClient](https://dy.kukutool.com/)                   | [KuKuTool视频解析](https://dy.kukutool.com/)                            |   ✔️     |   ✔️     | [kukutool.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/kukutool.py)     |
 | [KIT9VideoClient](https://apis.kit9.cn/api/aggregate_videos/)     | [聚合短视频解析](https://apis.kit9.cn/api/aggregate_videos/)            |   ✔️     |   ✔️     | [kit9.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/kit9.py)             |
+| [KuLeuVideoClient](https://api.kuleu.com/doc/jiexi.html)          | [酷乐聚合去水印解析](https://api.kuleu.com/doc/jiexi.html)              |   ✔️     |   ✔️     | [kuleu.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/kuleu.py)           |
 | [LongZhuVideoClient](https://www.hhlqilongzhu.cn/H5_home.php)     | [龙珠API视频解析](https://www.hhlqilongzhu.cn/H5_home.php)              |   ✔️     |   ✔️     | [longzhu.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/longzhu.py)       |
-| [LvlongVideoClient](https://jcy.lvlong.xyz/jxr.php)               | [绿龙解析](https://jcy.lvlong.xyz/jxr.php)                              |   ✔️     |   ✔️     | [lvlong.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/lvlong.py)         |
 | [MiZhiVideoClient](https://api.98dou.cn/doc/video_qsy/juhe.html)  | [觅知聚合短视频去水印](https://api.98dou.cn/doc/video_qsy/juhe.html)    |   ✔️     |   ✔️     | [mizhi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/mizhi.py)           |
 | [NoLogoVideoClient](https://nologo.code24.top/)                   | [去水印下载鸭](https://nologo.code24.top/)                              |   ✔️     |   ✔️     | [nologo.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/nologo.py)         |
 | [ODwonVideoClient](https://odown.cc/cctv)                         | [橙子解析](https://odown.cc/cctv)                                       |   ✔️     |   ✔️     | [odown.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/odown.py)           |
 | [PVVideoClient](https://www.parsevideo.com/)                      | [在线视频解析工具](https://www.parsevideo.com/)                         |   ✔️     |   ✔️     | [pv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/pv.py)                 |
 | [QingtingVideoClient](https://33tool.com/video_parse/)            | [蜻蜓工具](https://33tool.com/video_parse/)                             |   ✔️     |   ✔️     | [qingting.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/qingting.py)     |
 | [QZXDPToolsVideoClient](https://tools.qzxdp.cn/video_spider)      | [全栈工具视频解析](https://tools.qzxdp.cn/video_spider)                 |   ✔️     |   ✔️     | [qzxdptools.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/qzxdptools.py) |
-| [QwkunsVideoClient](https://qwkuns.me/)                           | [Qwkuns视频解析 (基于Cobalt)](https://qwkuns.me/)                       |   ✔️     |   ✔️     | [qwkuns.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/qwkuns.py)         |
+| [QingQiuVideoClient](https://api.hk0.cc/doc/juhev)                | [清秋短视频解析](https://api.hk0.cc/doc/juhev)                          |   ✔️     |   ✔️     | [qingqiu.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/qingqiu.py)       |
 | [RayVideoClient](https://www.raydownloader.com/)                  | [飞鱼视频下载助手](https://www.raydownloader.com/)                      |   ✔️     |   ✔️     | [ray.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/ray.py)               |
 | [SnapAnyVideoClient](https://snapany.com/zh)                      | [SnapAny万能解析](https://snapany.com/zh)                               |   ✔️     |   ✔️     | [snapany.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/snapany.py)       |
 | [SnapWCVideoClient](https://snapwc.com/zh)                        | [SnapWC视频解析](https://snapwc.com/zh)                                 |   ✔️     |   ✔️     | [snapwc.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/snapwc.py)         |
 | [SENJiexiVideoClient](https://jiexi.789jiexi.icu:4433/)           | [789视频解析](https://jiexi.789jiexi.icu:4433/)                         |   ✔️     |   ✔️     | [senjiexi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/senjiexi.py)     |
+| [SpapiVideoClient](https://api.spapi.cn/)                         | [短视频-去水印解析下载](https://api.spapi.cn/)                          |   ✔️     |   ✔️     | [spapi.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/spapi.py)           |
 | [VgetVideoClient](https://vget.xyz/)                              | [Vget视频解析](https://vget.xyz/)                                       |   ✔️     |   ✔️     | [vget.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/vget.py)             |
 | [VideoFKVideoClient](https://www.videofk.com/)                    | [免费短视频下载器](https://www.videofk.com/)                            |   ✔️     |   ✔️     | [videofk.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/videofk.py)       |
-| [WoofVideoClient](https://dl.woof.monster/)                       | [Woof视频解析 (基于Cobalt)](https://dl.woof.monster/)                   |   ✔️     |   ✔️     | [woof.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/woof.py)             |
+| [VThreadsVideoClient](https://vthreads.top/)                      | [解析任意视频](https://vthreads.top/)                                   |   ✔️     |   ✔️     | [vthreads.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/vthreads.py)     |
+| [WzjunVideoClient](https://sd.wzjun.com/douyin)                   | [SD短视频下载工具](https://sd.wzjun.com/douyin)                         |   ✔️     |   ✔️     | [wzjun.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/wzjun.py)           |
 | [XiazaitoolVideoClient](https://www.xiazaitool.com/dy)            | [下载狗](https://www.xiazaitool.com/dy)                                 |   ✔️     |   ✔️     | [xiazaitool.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/xiazaitool.py) |
 | [XMFlvVideoClient](https://jx.xmflv.com/)                         | [虾米解析](https://jx.xmflv.com/)                                       |   ✔️     |   ✔️     | [xmflv.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/xmflv.py)           |
 | [XCVTSVideoClient](https://api.xcvts.cn/)                         | [小尘聚合短视频去水印](https://api.xcvts.cn/)                           |   ✔️     |   ✔️     | [xcvts.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/xcvts.py)           |
-| [XZDXVideoClient](https://xzdx.top/#/pages/duan/duan)             | [小众独行助手](https://xzdx.top/#/pages/duan/duan)                      |   ✔️     |   ✔️     | [xzdx.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/xzdx.py)             |
 | [XiaolvfangVideoClient](https://www.xiaolvfang.com/)              | [效率坊](https://www.xiaolvfang.com/)                                   |   ✔️     |   ✔️     | [xiaolvfang.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/xiaolvfang.py) |
 | [ZanqianbaVideoClient](https://www.zanqianba.com/)                | [考拉解析](https://www.zanqianba.com/)                                  |   ✔️     |   ✔️     | [zanqianba.py](https://github.com/CharlesPikachu/videodl/blob/master/videodl/modules/common/zanqianba.py)   |
 
@@ -205,8 +227,7 @@ Specifically, these CLI tools include,
   ```
   If the installation is correct, you should see detailed version information instead of a "command not found" or "'ffmpeg' is not recognized" error.
 
-- **[N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE)**: 
-  FFmpeg is a general-purpose media tool that can download standard HLS/m3u8 streams, but it assumes that the playlist and segment URLs strictly follow the protocol. 
+- **[N_m3u8DL-RE](https://github.com/nilaoda/N_m3u8DL-RE)**: FFmpeg is a general-purpose media tool that can download standard HLS/m3u8 streams, but it assumes that the playlist and segment URLs strictly follow the protocol. 
   N_m3u8DL-RE is a specialized m3u8 downloader that adds extensive logic for handling encryption, anti-leech headers, redirects, and malformed playlists, so it can capture many "protected" or non-standard videos that FFmpeg fails on. 
   In many cases it’s also faster, because N_m3u8DL-RE can download HLS segments in parallel with optimized retries/merging, while FFmpeg typically pulls segments sequentially by default.
   ❗ **Therefore, we recommend that all videodl users install N_m3u8DL-RE to ensure videodl delivers the best possible performance.** ❗
@@ -215,7 +236,7 @@ Specifically, these CLI tools include,
   CCTVVideoClient, FoxNewsVideoClient, TencentVideoClient, GVVIPVideoClient, 
   SnapAnyVideoClient, VgetVideoClient, ArteTVVideoClient, XMFlvVideoClient, 
   RedditVideoClient, IIILabVideoClient, WWEVideoClient, IQiyiVideoClient,
-  PlusFIFAVideoClient, IM1907VideoClient, M1905VideoClient, SENJiexiVideoClient, etc.
+  JisuYunVideoClient, IM1907VideoClient, M1905VideoClient, SENJiexiVideoClient, etc.
   ```
   and downloads from many other sites that provide m3u8/HLS streams may also be significantly limited.
   As with FFmpeg, after installation you should make sure this tool can be run directly from the command line, *i.e.*, its location is included in your system `PATH`.
@@ -225,6 +246,14 @@ Specifically, these CLI tools include,
   ```
   If N_m3u8DL-RE is installed correctly, `N_m3u8DL-RE --version` will print the N_m3u8DL-RE version (*e.g.*, `0.5.1+c1f6db5639397dde362c31b31eebd88c796c90da`).
   If you see a similar `command not found` / `not recognized` error, N_m3u8DL-RE is not installed correctly or not available on your `PATH`.
+
+- **[Bento4](https://www.bento4.com/)**: Bento4 is an open-source MP4/DASH/HLS/CMAF toolkit, and in the N_m3u8DL-RE ecosystem it is mainly related as the source of auxiliary utilities such as "mp4decrypt" for handling certain packaged media workflows.
+  Therefore, when using N_m3u8DL-RE to handle some packaged media workflows that involve encryption (*e.g.*, `TBNUKVideoClient` and `PlayerPLVideoClient`), you need to make sure the Bento4 tools are available in your runtime environment.
+  A quick way to verify Bento4 is that you should be able to run
+  ```bash
+  mp4decrypt --version
+  ```
+  If it returns the version information successfully, Bento4 is installed correctly, otherwise the installation has failed or the tool is not in your `PATH`.
 
 - **[Node.js](https://nodejs.org/en)**: Currently, Node.js is only used in `YouTubeVideoClient`, `CCTVVideoClient` and `TencentVideoClient` to execute certain JavaScript code for video parsing. 
   Therefore, if you don’t need to use `YouTubeVideoClient`, `CCTVVideoClient` and `TencentVideoClient`, you can safely skip installing this CLI tool.
@@ -244,16 +273,86 @@ Specifically, these CLI tools include,
 
 # ⚡ Quick Start
 
-After a successful installation, you can run the snippet below,
+This guide shows the fastest ways to use videodl from the command line and from Python.
 
-```python
-from videodl import videodl
+videodl supports two common workflows:
 
-video_client = videodl.VideoClient()
-video_client.startparseurlcmdui()
+1. Parse and download in one step
+2. Parse first, inspect the result, then download
+
+#### Quick Use Videodl from Command Line
+
+(1) Download a video from a URL
+
+```bash
+videodl -i "https://www.acfun.cn/v/ac36491489"
 ```
 
-Or just run `videodl -i "URL"` (maybe `videodl --help` to show usage information) from the terminal,
+If videodl can find a matching client, it will parse the URL and start downloading automatically.
+
+The demonstration is as follows,
+
+<div align="center">
+  <img src="https://github.com/CharlesPikachu/videodl/raw/master/docs/screenshot.gif" width="600"/>
+</div>
+<br />
+
+(2) Start interactive mode
+
+If `-i` is not provided, videodl starts in terminal mode:
+
+```bash
+videodl
+```
+
+Then enter a video URL when prompted. In interactive mode:
+
+- enter `q` to quit
+- enter `r` to restart the UI
+
+
+(3) Restrict parsing to specific clients
+
+If the URL belongs to a known platform, specifying the client is usually faster.
+
+```bash
+videodl -i "https://www.acfun.cn/v/ac36491489" -a "AcFunVideoClient"
+```
+
+You can also provide multiple clients:
+
+```bash
+videodl -i "URL" -a "AcFunVideoClient,BilibiliVideoClient"
+```
+
+(4) Use only common / generic parsers
+
+```bash
+videodl -i "URL" -g
+```
+
+This is equivalent to `apply_common_video_clients_only=True` in Python.
+
+(5) Set client config from the command line
+
+Some options are passed as JSON strings.
+
+Example: change the output directory for one client:
+
+```bash
+videodl -i "https://www.acfun.cn/v/ac36491489" \
+  -a "AcFunVideoClient" \
+  -c '{"AcFunVideoClient": {"work_dir": "downloads"}}'
+```
+
+Example: pass custom headers or proxies:
+
+```bash
+videodl -i "URL" \
+  -r '{"AcFunVideoClient": {"headers": {"User-Agent": "Mozilla/5.0"}, "proxies": {"http": "http://127.0.0.1:7890", "https": "http://127.0.0.1:7890"}}}'
+```
+
+(6) CLI options
 
 ```bash
 Usage: videodl [OPTIONS]
@@ -286,13 +385,6 @@ Options:
   --help                          Show this message and exit.
 ```
 
-The demonstration is as follows,
-
-<div align="center">
-  <img src="https://github.com/CharlesPikachu/videodl/raw/master/docs/screenshot.gif" width="600"/>
-</div>
-<br />
-
 #### Recommended Parsing Commands for Common Streaming Platforms
 
 Recommended parsing and downloading commands for some widely used video platforms are as follows,
@@ -301,9 +393,10 @@ Recommended parsing and downloading commands for some widely used video platform
 # IQIYI / YOUKU / TENCENT / PPTV / MGTV / CCTV / BILIBILI (爱奇艺, 优酷, 腾讯视频, PPTV, 芒果TV, CCTV, B站等平台的电影电视剧)
 videodl -i "IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL" -g -a IM1907VideoClient (Recommended, 1080p)
 videodl -i "IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL" -g -a SENJiexiVideoClient (Recommended)
+videodl -i "IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL" -g -a JXM3U8VideoClient
 videodl -i "IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL" -g -a XMFlvVideoClient
 videodl -i "IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL" -g -a GVVIPVideoClient
-videodl -i "YOUKU/TENCENT" -g -a LvlongVideoClient
+videodl -i "IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL" -g -a JisuYunVideoClient
 # Examples
 videodl -i "https://www.iqiyi.com/v_cy4phe8b08.html" -g -a IM1907VideoClient
 videodl -i "https://v.qq.com/x/cover/mzc002001nl46xm/t410130yz0y.html" -g -a IM1907VideoClient
@@ -328,11 +421,12 @@ videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL
 videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL" -g -a SnapWCVideoClient
 videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL" -g -a KedouVideoClient
 videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL" -g -a KuKuToolVideoClient
+videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL" -g -a APICXVideoClient
 videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL" -g -a XiaolvfangVideoClient
-videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL" -g -a XZDXVideoClient
 videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL" -g -a KIT9VideoClient
 videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL" -g -a QZXDPToolsVideoClient
 videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL" -g -a NoLogoVideoClient
+videodl -i "DOUYIN/TIKTOK/KUAISHOU/XIAOHONGSHU/YOUTUBE/FACEBOOK/TITTER VIDEO URL" -g -a SpapiVideoClient
 # Examples
 videodl -i "https://www.douyin.com/jingxuan?modal_id=7569541184671974899" -g -a SnapAnyVideoClient
 videodl -i "https://www.tiktok.com/@pet_statione/video/7579841364599328013?lang=en" -g -a SnapAnyVideoClient
@@ -360,11 +454,6 @@ videodl -i "https://www.bilibili.com/video/av8903802/" -a BilibiliVideoClient
 videodl -i "CCTV VIDEO URL" -a CCTVVideoClient
 # Examples
 videodl -i "https://v.cctv.com/2026/01/09/VIDE0ifonRhsuR952gJ3zUKu260109.shtml?spm=C90324.PE6LRxWJhH5P.S23920.3" -a CCTVVideoClient
-
-# PLUSFIFA (国际足联+比赛视频)
-videodl -i "PLUSFIFA VIDEO URL" -a PlusFIFAVideoClient
-# Examples
-videodl -i "https://www.plus.fifa.com/en/content/fc-sochaux-montbeliard-vs-lb-chateauroux/6ff75563-c6fc-4b08-b324-54771dbd7029" -a PlusFIFAVideoClient
 ```
 
 In practice, the general-purpose video parsers listed under [Supported Video Client](https://github.com/CharlesPikachu/videodl/tree/master?tab=readme-ov-file#-supported-video-client) can handle parsing and downloading videos from most major platforms. 
@@ -372,171 +461,266 @@ The main difference typically comes down to the maximum resolution and overall o
 If video quality matters to you, feel free to try a few different parsers and compare the results. 
 And if you discover anything useful, you’re welcome to share your findings in the repo’s [Discussions section](https://github.com/CharlesPikachu/videodl/discussions).
 
-#### Parsing and Downloading as Separate Steps
+#### Quick Use Videodl from Python
 
-If you just want to parse a video link and retrieve information about the video, you can do it like this,
-
-```python
-from videodl import videodl
-
-# set allowed_video_sources to select the clients used for parsing the URL.
-video_client = videodl.VideoClient(allowed_video_sources=['YoukuVideoClient'])
-# parse from url
-video_infos = video_client.parsefromurl("https://v.youku.com/v_show/id_XNDUxOTc1NDg4MA==.html")
-# print parse results
-print(video_infos)
-```
-
-The output of this code looks like,
-
-```python
-[
-  {
-    "source": "YoukuVideoClient",
-    "raw_data": {},
-    "download_url": "http://pl-ali.youku.com/playlist/m3u8?vid=XNDUxOTc1NDg4MA%3D%3D&type=mp4hd2v3&ups_client_netip=725c13c1&utid=Mu3nIfZs0CsCAXJcE8F2Zepy&ccode=0564&psid=9f0ebc4bd03a063e9f543b0f1142b2c041346&duration=2205&expire=18000&drm_type=1&drm_device=0&drm_default=1&dyt=0&ups_ts=1767964466&onOff=0&encr=0&ups_key=c0632ee975ef2dacc2118d9130573bd5&ckt=3&m_onoff=0&pn=&drm_type_value=default&v=v1&bkp=0",
-    "title": "史家绝唱",
-    "file_path": "videodl_outputs\\YoukuVideoClient\\史家绝唱.m3u",
-    "ext": "m3u",
-    "err_msg": "",
-    "download_with_ffmpeg": true,
-    "download_with_aria2c": false,
-    "enable_nm3u8dlre": false,
-    "identifier": "XNDUxOTc1NDg4MA==",
-    "guess_video_ext_result": {
-      "ext": "m3u",
-      "sniffer": "requests.head",
-      "ok": true
-    },
-    "audio_download_url": "",
-    "guess_audio_ext_result": {},
-    "audio_ext": "m4a",
-    "audio_file_path": "",
-    "default_download_headers": null,
-    "default_download_cookies": null
-  }
-]
-```
-
-Then you can also call the video downloading function to download the video parsed by videodl. The code is as follows,
+(1) Create a `VideoClient`
 
 ```python
 from videodl import videodl
 
-video_client = videodl.VideoClient(allowed_video_sources=['YoukuVideoClient'])
-video_infos = video_client.parsefromurl("https://v.youku.com/v_show/id_XNDUxOTc1NDg4MA==.html")
-video_client.download(video_infos=video_infos)
+video_client = videodl.VideoClient()
 ```
 
-#### Parse and Download Speedup
+This creates a high-level client that can:
 
-To reduce parsing time, you can specify which parser to use for the video you’re downloading, *i.e.*,
+- choose a suitable parser
+- parse a URL into one or more `VideoInfo` objects
+- download the parsed videos
 
-```bash
-videodl -i "BILIBILI VIDEO URL" -a BilibiliVideoClient
-```
-
-is better than,
-
-```bash
-videodl -i "BILIBILI VIDEO URL"
-```
-
-If you know the video URL you want to parse is not covered by the platform-specific clients and you’d like to use a generic parser directly, set `apply_common_video_clients_only` to `True`.
-For example, you can run `videodl -i "URL" -g` in the terminal, or do the same in code as shown below,
-
-```python
-from videodl import videodl
-
-video_client = videodl.VideoClient(apply_common_video_clients_only=True)
-video_client.startparseurlcmdui()
-```
-
-Better yet, specify the generic parser you want to use. For example, to download a Douyin/TikTok video, run,
-
-```bash
-videodl -i "https://www.douyin.com/jingxuan?modal_id=7578412593719577899" -g -a "KedouVideoClient"
-videodl -i "https://www.douyin.com/jingxuan?modal_id=7580605435187596559" -g -a "SnapWCVideoClient"
-videodl -i "https://www.tiktok.com/@mustsharenews/video/7581408863128161552?lang=en" -g -a "SnapWCVideoClient"
-```
-
-If you want to use aria2c to accelerate the download of non-HLS/m3u8 streams, such as mp4 files, you can do the following,
-
-```python
-from videodl import videodl
-
-video_client = videodl.VideoClient(allowed_video_sources=['BilibiliVideoClient'])
-video_infos = video_client.parsefromurl("https://www.bilibili.com/bangumi/play/ss26801")
-for v in video_infos: v['download_with_aria2c'] = True
-video_client.download(video_infos=video_infos)
-```
-
-If you want to use N_m3u8DL-RE to speed up the download of HLS/m3u8 streams, you can do the following 
-(*starting from videofetch 0.4.0, as long as the environment variables include N_m3u8DL-RE, the program will automatically invoke N_m3u8DL-RE to accelerate video downloads.*),
+(2) Parse and download in one step
 
 ```python
 from videodl import videodl
 
 video_client = videodl.VideoClient()
 video_infos = video_client.parsefromurl("https://www.acfun.cn/v/ac36491489")
-for v in video_infos: v['enable_nm3u8dlre'] = True
-video_client.download(video_infos=video_infos)
+video_client.download(video_infos)
 ```
 
-#### VIP / Premium Video Parsing
-
-For VIP (premium) video links, you have two options to parse and download the video. 
-
-The first option is to use a third-party parsing service. 
-For example, for an IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL (Movies and TV shows), you can run the following command,
-
-```bash
-videodl -i "IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL" -g -a IM1907VideoClient (Recommended, 1080p)
-videodl -i "IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL" -g -a SENJiexiVideoClient (Recommended)
-videodl -i "IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL" -g -a XMFlvVideoClient
-videodl -i "IQIYI/YOUKU/TENCENT/PPTV/MGTV/CCTV/BILIBILI VIDEO URL" -g -a GVVIPVideoClient
-videodl -i "YOUKU/TENCENT" -g -a LvlongVideoClient
-```
-
-Of course, it’s worth noting that this approach may come with some drawbacks, for example, some third-party parsing services may occasionally insert a few seconds of unwanted ads into the downloaded video.
-These ads are not added by videodl, they are inserted by the online parsing website. 
-We recommend using ffmpeg to trim out the ad segments ([Example Script](https://github.com/CharlesPikachu/videodl/blob/master/scripts/ffmpeg_segment_remover.py)).
-
-The second option is to parse and download VIP (premium) videos directly via the platform’s native APIs (you’ll need to provide cookies from an account logged in with an active membership on that platform),
+(3) Start interactive mode from Python
 
 ```python
 from videodl import videodl
 
-your_vip_cookies_with_str_or_dict_format = ""
-init_video_clients_cfg = dict()
-init_video_clients_cfg['IQiyiVideoClient'] = {'default_parse_cookies': your_vip_cookies_with_str_or_dict_format}
-video_client = videodl.VideoClient(init_video_clients_cfg=init_video_clients_cfg, allowed_video_sources=['IQiyiVideoClient'])
+video_client = videodl.VideoClient()
 video_client.startparseurlcmdui()
 ```
 
-Alternatively, you can run the following command directly in the terminal,
-
-```bash
-videodl -i "URL" -c "{'IQiyiVideoClient': {'default_parse_cookies': your_vip_cookies_with_str_or_dict_format}}" -a IQiyiVideoClient
-```
-
-If the code above can successfully extract the VIP video URL but the download fails, try also passing your membership cookies during the download step,
+(4) Use only selected clients
 
 ```python
 from videodl import videodl
 
-your_vip_cookies_with_str_or_dict_format = ""
-init_video_clients_cfg = dict()
-init_video_clients_cfg['TencentVideoClient'] = {'default_parse_cookies': your_vip_cookies_with_str_or_dict_format, 'default_download_cookies': your_vip_cookies_with_str_or_dict_format}
-video_client = videodl.VideoClient(init_video_clients_cfg=init_video_clients_cfg, allowed_video_sources=['TencentVideoClient'])
-video_client.startparseurlcmdui()
+video_client = videodl.VideoClient(
+    allowed_video_sources=["AcFunVideoClient"]
+)
+video_infos = video_client.parsefromurl("https://www.acfun.cn/v/ac36491489")
+video_client.download(video_infos)
 ```
 
-Alternatively, you can run the following command directly in the terminal,
+(5) Use only common / generic clients
+
+```python
+from videodl import videodl
+
+video_client = videodl.VideoClient(apply_common_video_clients_only=True)
+video_infos = video_client.parsefromurl("URL")
+video_client.download(video_infos)
+```
+
+#### Parse First, Then Inspect the Result
+
+Sometimes it is useful to inspect the parsed result before downloading.
+
+```python
+from videodl import videodl
+
+video_client = videodl.VideoClient(allowed_video_sources=["AcFunVideoClient"])
+video_infos = video_client.parsefromurl("https://www.acfun.cn/v/ac36491489")
+
+for info in video_infos:
+    print(info["source"])
+    print(info["title"])
+    print(info["download_url"])
+    print(info["save_path"])
+    print(info["ext"])
+    print(info["err_msg"])
+```
+
+A parsed item is a `VideoInfo` object. It behaves like both a dataclass object and a dictionary.
+
+For example, both styles work:
+
+```python
+info = video_infos[0]
+print(info.title)
+print(info["title"])
+```
+
+Common fields include:
+
+- `source`: which client produced this result
+- `title`: video title
+- `download_url`: resolved media URL
+- `save_path`: output file path
+- `ext`: file extension
+- `err_msg`: parsing error, if any
+- `download_with_ffmpeg`: whether ffmpeg should be used
+- `download_with_aria2c`: whether aria2c should be used
+- `enable_nm3u8dlre`: whether N_m3u8DL-RE should be used
+
+#### Download a Parsed Result Later
+
+Once `video_infos` is ready, download it like this:
+
+```python
+video_client.download(video_infos)
+```
+
+You can also modify the parsed result before downloading.
+
+Example: enable `aria2c` for a direct file download:
+
+```python
+for info in video_infos:
+    info["download_with_aria2c"] = True
+
+video_client.download(video_infos)
+```
+
+Example: enable `N_m3u8DL-RE` for HLS / m3u8 downloads:
+
+```python
+for info in video_infos:
+    info["enable_nm3u8dlre"] = True
+
+video_client.download(video_infos)
+```
+
+Example: force `ffmpeg` download:
+
+```python
+for info in video_infos:
+    info["download_with_ffmpeg"] = True
+
+video_client.download(video_infos)
+```
+
+#### Common Configuration Examples
+
+(1) Change the output directory
+
+```python
+from videodl import videodl
+
+video_client = videodl.VideoClient(
+    init_video_clients_cfg={
+        "AcFunVideoClient": {
+            "work_dir": "downloads"
+        }
+    },
+    allowed_video_sources=["AcFunVideoClient"]
+)
+```
+
+(2) Pass cookies for parsing or downloading
+
+```python
+from videodl import videodl
+
+cookies = "your cookies here"
+
+video_client = videodl.VideoClient(
+    init_video_clients_cfg={
+        "SomeVideoClient": {
+            "default_parse_cookies": cookies,
+            "default_download_cookies": cookies,
+        }
+    },
+    allowed_video_sources=["SomeVideoClient"]
+)
+```
+
+(3) Pass custom request options
+
+`requests_overrides` is useful when a client needs extra headers, cookies, timeout settings, or proxies.
+
+```python
+from videodl import videodl
+
+video_client = videodl.VideoClient(
+    requests_overrides={
+        "AcFunVideoClient": {
+            "headers": {
+                "User-Agent": "Mozilla/5.0"
+            },
+            "proxies": {
+                "http": "http://127.0.0.1:7890",
+                "https": "http://127.0.0.1:7890"
+            }
+        }
+    },
+    allowed_video_sources=["AcFunVideoClient"]
+)
+```
+
+(4) Set download threads per client
+
+```python
+from videodl import videodl
+
+video_client = videodl.VideoClient(
+    clients_threadings={
+        "AcFunVideoClient": 8
+    },
+    allowed_video_sources=["AcFunVideoClient"]
+)
+```
+
+#### Direct Media URLs
+
+If the input URL is already a direct media link, videodl will try to handle it directly without needing a platform-specific / general-purpose video client as a parser.
+
+```python
+from videodl import videodl
+
+video_client = videodl.VideoClient()
+video_infos = video_client.parsefromurl("https://example.com/video.mp4")
+video_client.download(video_infos)
+```
+
+#### Tips
+
+(1) Prefer specific clients when possible
+
+This is usually faster:
+
+```python
+video_client = videodl.VideoClient(allowed_video_sources=["AcFunVideoClient"])
+```
+
+than searching through all supported clients.
+
+(2) Generic parsers are useful when platform-specific parsing does not work
+
+Use:
+
+```python
+videodl.VideoClient(apply_common_video_clients_only=True)
+```
+
+or on the CLI:
 
 ```bash
-videodl -i "URL" -c "{'TencentVideoClient': {'default_parse_cookies': your_vip_cookies_with_str_or_dict_format, 'default_download_cookies': your_vip_cookies_with_str_or_dict_format}}" -a TencentVideoClient
+videodl -g -i "URL"
 ```
+
+(3) Some download accelerators require external tools
+
+Depending on how a video is parsed, videodl may work with:
+
+- `ffmpeg`
+- `aria2c`
+- `N_m3u8DL-RE`
+
+Make sure they are installed and available in your environment before enabling them.
+
+
+(4) A parse result may contain multiple videos
+
+Some URLs may return more than one `VideoInfo`, so always treat the return value of `parsefromurl()` as a list.
+
+Please refer to the documentation for further details: https://videofetch.readthedocs.io/
 
 
 # 💡 Recommended Projects
@@ -546,6 +730,7 @@ videodl -i "URL" -c "{'TencentVideoClient': {'default_parse_cookies': your_vip_c
 | 🎵 **Musicdl**<br/>轻量级无损音乐下载器                    | [![Stars](https://img.shields.io/github/stars/CharlesPikachu/musicdl?style=flat-square)](https://github.com/CharlesPikachu/musicdl)                   | [![Version](https://img.shields.io/pypi/v/musicdl)](https://pypi.org/project/musicdl)                      | [![Last Commit](https://img.shields.io/github/last-commit/CharlesPikachu/musicdl?style=flat-square)](https://github.com/CharlesPikachu/musicdl/commits/master)                   | [🛠 Repository](https://github.com/CharlesPikachu/musicdl)           |
 | 🎬 **Videodl**<br/>轻量级高清无水印视频下载器              | [![Stars](https://img.shields.io/github/stars/CharlesPikachu/videodl?style=flat-square)](https://github.com/CharlesPikachu/videodl)                   | [![Version](https://img.shields.io/pypi/v/videofetch)](https://pypi.org/project/videofetch)                | [![Last Commit](https://img.shields.io/github/last-commit/CharlesPikachu/videodl?style=flat-square)](https://github.com/CharlesPikachu/videodl/commits/master)                   | [🛠 Repository](https://github.com/CharlesPikachu/videodl)           |
 | 🖼️ **Imagedl**<br/>轻量级海量图片搜索下载器                | [![Stars](https://img.shields.io/github/stars/CharlesPikachu/imagedl?style=flat-square)](https://github.com/CharlesPikachu/imagedl)                   | [![Version](https://img.shields.io/pypi/v/pyimagedl)](https://pypi.org/project/pyimagedl)                  | [![Last Commit](https://img.shields.io/github/last-commit/CharlesPikachu/imagedl?style=flat-square)](https://github.com/CharlesPikachu/imagedl/commits/main)                     | [🛠 Repository](https://github.com/CharlesPikachu/imagedl)           |
+| 🖼️ **Paperdl**<br/>轻量级学术论文搜索下载器                | [![Stars](https://img.shields.io/github/stars/CharlesPikachu/paperdl?style=flat-square)](https://github.com/CharlesPikachu/paperdl)                   | [![Version](https://img.shields.io/pypi/v/paperdl)](https://pypi.org/project/paperdl)                      | [![Last Commit](https://img.shields.io/github/last-commit/CharlesPikachu/paperdl?style=flat-square)](https://github.com/CharlesPikachu/paperdl/commits/main)                     | [🛠 Repository](https://github.com/CharlesPikachu/paperdl)           |
 | 🌐 **FreeProxy**<br/>全球海量高质量免费代理采集器          | [![Stars](https://img.shields.io/github/stars/CharlesPikachu/freeproxy?style=flat-square)](https://github.com/CharlesPikachu/freeproxy)               | [![Version](https://img.shields.io/pypi/v/pyfreeproxy)](https://pypi.org/project/pyfreeproxy)              | [![Last Commit](https://img.shields.io/github/last-commit/CharlesPikachu/freeproxy?style=flat-square)](https://github.com/CharlesPikachu/freeproxy/commits/master)               | [🛠 Repository](https://github.com/CharlesPikachu/freeproxy)         |
 | 🌐 **MusicSquare**<br/>简易音乐搜索下载和播放网页          | [![Stars](https://img.shields.io/github/stars/CharlesPikachu/musicsquare?style=flat-square)](https://github.com/CharlesPikachu/musicsquare)           | [![Version](https://img.shields.io/pypi/v/musicdl)](https://pypi.org/project/musicdl)                      | [![Last Commit](https://img.shields.io/github/last-commit/CharlesPikachu/musicsquare?style=flat-square)](https://github.com/CharlesPikachu/musicsquare/commits/main)             | [🛠 Repository](https://github.com/CharlesPikachu/musicsquare)       |
 | 🌐 **FreeGPTHub**<br/>真正免费的GPT统一接口                | [![Stars](https://img.shields.io/github/stars/CharlesPikachu/FreeGPTHub?style=flat-square)](https://github.com/CharlesPikachu/FreeGPTHub)             | [![Version](https://img.shields.io/pypi/v/freegpthub)](https://pypi.org/project/freegpthub)                | [![Last Commit](https://img.shields.io/github/last-commit/CharlesPikachu/FreeGPTHub?style=flat-square)](https://github.com/CharlesPikachu/FreeGPTHub/commits/main)               | [🛠 Repository](https://github.com/CharlesPikachu/FreeGPTHub)        |
@@ -569,7 +754,13 @@ If you use this project in your research, please cite the repository.
 
 # 🌟 Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=CharlesPikachu/videodl&type=date&legend=top-left)](https://www.star-history.com/#CharlesPikachu/videodl&type=date&legend=top-left)
+<a href="https://www.star-history.com/?repos=CharlesPikachu%2Fvideodl&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=CharlesPikachu/videodl&type=date&theme=dark&legend=top-left&sealed_token=QnlmPCuc75V4LZ04rTPaPvK10yylyHoizFC__Cy5sFYZ1YLY4DAdnHtPb5phAKOyuB5TyK9T3To7Sjd3CJ96KBYABMnxGECVwQeoNrgwArLZeHsGfX-_Kg" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=CharlesPikachu/videodl&type=date&legend=top-left&sealed_token=QnlmPCuc75V4LZ04rTPaPvK10yylyHoizFC__Cy5sFYZ1YLY4DAdnHtPb5phAKOyuB5TyK9T3To7Sjd3CJ96KBYABMnxGECVwQeoNrgwArLZeHsGfX-_Kg" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=CharlesPikachu/videodl&type=date&legend=top-left&sealed_token=QnlmPCuc75V4LZ04rTPaPvK10yylyHoizFC__Cy5sFYZ1YLY4DAdnHtPb5phAKOyuB5TyK9T3To7Sjd3CJ96KBYABMnxGECVwQeoNrgwArLZeHsGfX-_Kg" />
+ </picture>
+</a>
 
 
 # ☕ Appreciation (赞赏 / 打赏)

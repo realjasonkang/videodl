@@ -46,8 +46,8 @@ class KuaishouVideoClient(BaseVideoClient):
             video_info.update(dict(download_url=(download_url := [c["url"] for c in candidates][0])))
             video_title = legalizestring(photo.get('caption', null_backup_title), replace_null_string=null_backup_title).removesuffix('.')
             guess_video_ext_result = FileTypeSniffer.getfileextensionfromurl(url=download_url, headers=self.default_download_headers, request_overrides=request_overrides, cookies=self.default_download_cookies)
-            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info['ext']
-            video_info.update(dict(title=video_title, file_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=cover_url[0] if (cover_url := searchdictbykey(raw_data, 'coverUrl')) else None))
+            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info.ext
+            video_info.update(dict(title=video_title, save_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=cover_url[0] if (cover_url := searchdictbykey(raw_data, 'coverUrl')) else None))
         except Exception as err:
             video_info.update(dict(err_msg=(err_msg := f'{self.source}._parsefromurlusingrequests >>> {url} (Error: {err})')))
             self.logger_handle.error(err_msg, disable_print=self.disable_print)
@@ -59,7 +59,7 @@ class KuaishouVideoClient(BaseVideoClient):
         # prepare
         if not self.belongto(url=url): return []
         request_overrides, video_info, null_backup_title = request_overrides or {}, VideoInfo(source=self.source), yieldtimerelatedtitle(self.source)
-        def co_hook_func(co): co.set_argument('--disable-blink-features=AutomationControlled'); co.set_argument('--mute-audio'); co.set_local_port = lambda *args, **kwargs: co; return co
+        def co_hook_func(co): co.set_argument('--disable-blink-features=AutomationControlled'); co.set_argument('--mute-audio'); co.auto_port = lambda *args, **kwargs: co; return co
         # try parse
         try:
             vid = urlparse(url).path.strip('/').split('/')[-1]
@@ -72,8 +72,8 @@ class KuaishouVideoClient(BaseVideoClient):
             video_title = legalizestring(video_title, replace_null_string=null_backup_title).removesuffix('.'); raw_data = page.html; page.quit()
             video_info.update(dict(raw_data=raw_data, download_url=download_url))
             guess_video_ext_result = FileTypeSniffer.getfileextensionfromurl(url=download_url, headers=self.default_download_headers, request_overrides=request_overrides, cookies=self.default_download_cookies)
-            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info['ext']
-            video_info.update(dict(title=video_title, file_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=cover_url))
+            ext = guess_video_ext_result['ext'] if guess_video_ext_result['ext'] and guess_video_ext_result['ext'] != 'NULL' else video_info.ext
+            video_info.update(dict(title=video_title, save_path=os.path.join(self.work_dir, self.source, f'{video_title}.{ext}'), ext=ext, guess_video_ext_result=guess_video_ext_result, identifier=vid, cover_url=cover_url))
         except Exception as err:
             video_info.update(dict(err_msg=(err_msg := f'{self.source}._parsefromurlusingdrissionpage >>> {url} (Error: {err})')))
             self.logger_handle.error(err_msg, disable_print=self.disable_print)
@@ -84,7 +84,7 @@ class KuaishouVideoClient(BaseVideoClient):
     def parsefromurl(self, url: str, request_overrides: dict = None):
         for parser in [self._parsefromurlusingdrissionpage, self._parsefromurlusingrequests]:
             video_infos = parser(url, request_overrides)
-            if any(((info.get("download_url") or "").upper() not in ("", "NULL")) for info in (video_infos or [])): break
+            if any(video_info.with_valid_download_url for video_info in (video_infos or [])): break
         return video_infos
     '''belongto'''
     @staticmethod

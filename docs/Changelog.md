@@ -1,5 +1,33 @@
 # Development Log
 
+- 2026-06-26: Released videofetch v0.9.1 - added support for video parsing and downloading from myvideo.ge and newspicks.com; removed the web interface for Meipai video parsing and switched to the app interface.
+
+- 2026-06-26: Released videofetch v0.9.0 - for the common video client, fix all broken video clients, remove APIs that no longer provide free parsing services, and add multiple general-purpose video parsing interfaces; for platform-specific clients, remove support for dead sites and fix some broken APIs.
+
+- 2026-05-25: Released videofetch v0.8.9 - remove support for the eastday.com site; add video parsing and download support for the Malaysian Oriental Daily News and iYF.tv sites.
+
+- 2026-05-04: Released videofetch v0.8.8 - fix the general video parsing and downloading capabilities for the SnapAny and GreenVideo sites; add support for parsing and downloading from the Rutube site.
+
+- 2026-05-01: Released videofetch v0.8.7 - added support for video parsing and downloading from Dailymotion; fixed a bug where YouTube video downloads might retrieve invalid links; fixed issues with some general parsing sources ("vthreads.top") and addressed potential bugs in ffmpeg commands.
+
+- 2026-04-28: Released videofetch v0.8.6 - add a general-purpose video parser/downloader (supported by "vthreads.top") and video parsing/download support for the Ming Pao website.
+
+- 2026-04-27: Released videofetch v0.8.5 - added general video parsing support based on the wzjun site; added support for parsing shared links from Pipixia videos; fixed the general video parsing feature for the iiilab site.
+
+- 2026-04-22: Released videofetch v0.8.4 - codebase partially optimized; added progress indicators for sites that support multi-video parsing; introduced video parsing and download support for Huanqiu and People’s Daily.
+
+- 2026-04-09: Released videofetch v0.8.3 - added video parsing and download support for Xinhua News and NetEase News; fixed an issue causing unexpected session behavior during session maintenance.
+
+- 2026-04-08: Released videofetch v0.8.2 - added video parsing and downloading support for multiple sites, including CCTV News, Kankan News, China Daily, and Eastday; optimized parts of the code and fixed several bugs.
+
+- 2026-04-03: Released videofetch v0.8.1 - improved the downloadable video quality in the YouTube video client; added a native API for LeTV video parsing and downloading; added a general-purpose parsing API.
+
+- 2026-04-02: Released videofetch v0.8.0 - refactored the base video client class to make the video downloading logic clearer and more extensible; refactored the video info class to provide more comprehensive functionality and more IDE-friendly hints; fixed bugs and invalidation issues in multiple supported video clients.
+
+- 2026-03-27: Released videofetch v0.7.2 - added a new general-purpose video parsing interface; added support for video parsing and downloading from the player.pl site; fixed some potential bugs.
+
+- 2026-03-25: Released videofetch v0.7.1 - added a universal video parsing API; enhanced the robustness of certain code segments; more comprehensive and flexible requirements.
+
 - 2026-03-23: Released videofetch v0.7.0 - removed Playwright-related dependencies and replaced them with DrissionPage; improved support for parsing and downloading videos from platforms such as Xinpianchang and Kuaishou; added multiple general-purpose video parsers and downloaders; fixed several known bugs.
 
 - 2026-03-13: Released videofetch v0.6.8 - added video parsing and downloading support for two new sites, namely, "watch.tbn.uk" and "www.abc.net.au"; optimized the implementation of "VideoInfo" data class to make IDE usage more convenient; fixed several known bugs.

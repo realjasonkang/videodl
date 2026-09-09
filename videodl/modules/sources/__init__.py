@@ -1,4 +1,5 @@
 '''initialize'''
+from .iyf import IYFVideoClient
 from .abc import ABCVideoClient
 from .wwe import WWEVideoClient
 from .ted import TedVideoClient
@@ -12,6 +13,7 @@ from .base import BaseVideoClient
 from .mgtv import MGTVVideoClient
 from .cctv import CCTVVideoClient
 from .sohu import SohuVideoClient
+from .nuvid import NuVidVideoClient
 from .tbnuk import TBNUKVideoClient
 from .unity import UnityVideoClient
 from .acfun import AcFunVideoClient
@@ -24,6 +26,8 @@ from .kakao import KakaoVideoClient
 from .youku import YoukuVideoClient
 from .m1905 import M1905VideoClient
 from .iqiyi import IQiyiVideoClient
+from .leshi import LeshiVideoClient
+from .rutube import RutubeVideoClient
 from .douyin import DouyinVideoClient
 from .artetv import ArteTVVideoClient
 from .reddit import RedditVideoClient
@@ -36,6 +40,8 @@ from ..utils import BaseModuleBuilder
 from .wesing import WeSingVideoClient
 from .cctalk import CCtalkVideoClient
 from .beacon import BeaconVideoClient
+from .www163 import WWW163VideoClient
+from .people import PeopleVideoClient
 from .kugoumv import KugouMVVideoClient
 from .wittytv import WittyTVVideoClient
 from .open163 import Open163VideoClient
@@ -45,32 +51,49 @@ from .rednote import RednoteVideoClient
 from .sixroom import SixRoomVideoClient
 from .tencent import TencentVideoClient
 from .xuexicn import XuexiCNVideoClient
-from .plusfifa import PlusFIFAVideoClient
+from .huanqiu import HuanQiuVideoClient
+from .mingpao import MingpaoVideoClient
+from .cctvnews import CCTVNewsVideoClient
+from .playerpl import PlayerPLVideoClient
 from .kuaishou import KuaishouVideoClient
 from .bilibili import BilibiliVideoClient
+from .myvideoge import MyVideoGeVideoClient
+from .newspicks import NewsPicksVideoClient
+from .xinhuanet import XinhuaNetVideoClient
 from .yinyuetai import YinyuetaiVideoClient
 from .duxiaoshi import DuxiaoshiVideoClient
 from .dongchedi import DongchediVideoClient
+from .kankannews import KanKanNewsVideoClient
 from .baidutieba import BaiduTiebaVideoClient
 from .eyepetizer import EyepetizerVideoClient
+from .chinadaily import ChinaDailyVideoClient
+from .dailymotion import DailyMotionVideoClient
 from .pipigaoxiao import PipigaoxiaoVideoClient
 from .xinpianchang import XinpianchangVideoClient
+from .orientaldaily import OrientalDailyVideoClient
 
 
 '''VideoClientBuilder'''
 class VideoClientBuilder(BaseModuleBuilder):
-    REGISTERED_MODULES = {
-        'CCCVideoClient': CCCVideoClient, 'BilibiliVideoClient': BilibiliVideoClient, 'AcFunVideoClient': AcFunVideoClient, 'HaokanVideoClient': HaokanVideoClient, 'YinyuetaiVideoClient': YinyuetaiVideoClient,
-        'HuyaVideoClient': HuyaVideoClient, 'TedVideoClient': TedVideoClient, 'PipigaoxiaoVideoClient': PipigaoxiaoVideoClient, 'PipixVideoClient': PipixVideoClient, 'PlusFIFAVideoClient': PlusFIFAVideoClient,
-        'BaiduTiebaVideoClient': BaiduTiebaVideoClient, 'MGTVVideoClient': MGTVVideoClient, 'OasisVideoClient': OasisVideoClient, 'MeipaiVideoClient': MeipaiVideoClient, 'ZuiyouVideoClient': ZuiyouVideoClient,
-        'DuxiaoshiVideoClient': DuxiaoshiVideoClient, 'Ku6VideoClient': Ku6VideoClient, 'RednoteVideoClient': RednoteVideoClient, 'WeiboVideoClient': WeiboVideoClient, 'Open163VideoClient': Open163VideoClient,
-        'KuaishouVideoClient': KuaishouVideoClient, 'WeishiVideoClient': WeishiVideoClient, 'ZhihuVideoClient': ZhihuVideoClient, 'YouTubeVideoClient': YouTubeVideoClient, 'M1905VideoClient': M1905VideoClient, 
-        'XinpianchangVideoClient': XinpianchangVideoClient, 'ArteTVVideoClient': ArteTVVideoClient, 'WWEVideoClient': WWEVideoClient, 'DouyinVideoClient': DouyinVideoClient, 'C56VideoClient': C56VideoClient,
-        'DongchediVideoClient': DongchediVideoClient, 'FoxNewsVideoClient': FoxNewsVideoClient, 'SinaVideoClient': SinaVideoClient, 'XuexiCNVideoClient': XuexiCNVideoClient, 'PearVideoClient': PearVideoClient, 
-        'SixRoomVideoClient': SixRoomVideoClient, 'WeSingVideoClient': WeSingVideoClient, 'XiguaVideoClient': XiguaVideoClient, 'TencentVideoClient': TencentVideoClient, 'GeniusVideoClient': GeniusVideoClient, 
-        'CCtalkVideoClient': CCtalkVideoClient, 'RedditVideoClient': RedditVideoClient, 'IQiyiVideoClient': IQiyiVideoClient,   'WittyTVVideoClient': WittyTVVideoClient, 'YoukuVideoClient': YoukuVideoClient, 
-        'CCTVVideoClient': CCTVVideoClient, 'SohuVideoClient': SohuVideoClient, 'EyepetizerVideoClient': EyepetizerVideoClient, 'KugouMVVideoClient': KugouMVVideoClient, 'UnityVideoClient': UnityVideoClient, 
-        'KakaoVideoClient': KakaoVideoClient, 'BeaconVideoClient': BeaconVideoClient, 'ABCVideoClient': ABCVideoClient, 'TBNUKVideoClient': TBNUKVideoClient, 
+    REGISTERED_MODULES = video_clients = {
+        'ABCVideoClient': ABCVideoClient,                   'AcFunVideoClient': AcFunVideoClient,               'ArteTVVideoClient': ArteTVVideoClient,             'BaiduTiebaVideoClient': BaiduTiebaVideoClient,
+        'BeaconVideoClient': BeaconVideoClient,             'BilibiliVideoClient': BilibiliVideoClient,         'C56VideoClient': C56VideoClient,                   'CCCVideoClient': CCCVideoClient,
+        'CCtalkVideoClient': CCtalkVideoClient,             'DongchediVideoClient': DongchediVideoClient,       'DouyinVideoClient': DouyinVideoClient,             'CCTVNewsVideoClient': CCTVNewsVideoClient,
+        'DuxiaoshiVideoClient': DuxiaoshiVideoClient,       'EyepetizerVideoClient': EyepetizerVideoClient,     'FoxNewsVideoClient': FoxNewsVideoClient,           'GeniusVideoClient': GeniusVideoClient,
+        'HaokanVideoClient': HaokanVideoClient,             'HuyaVideoClient': HuyaVideoClient,                 'IQiyiVideoClient': IQiyiVideoClient,               'KakaoVideoClient': KakaoVideoClient,
+        'Ku6VideoClient': Ku6VideoClient,                   'KuaishouVideoClient': KuaishouVideoClient,         'KugouMVVideoClient': KugouMVVideoClient,           'M1905VideoClient': M1905VideoClient,
+        'MGTVVideoClient': MGTVVideoClient,                 'MeipaiVideoClient': MeipaiVideoClient,             'OasisVideoClient': OasisVideoClient,               'Open163VideoClient': Open163VideoClient,
+        'PearVideoClient': PearVideoClient,                 'PipigaoxiaoVideoClient': PipigaoxiaoVideoClient,   'PipixVideoClient': PipixVideoClient,               'PlayerPLVideoClient': PlayerPLVideoClient,
+        'IYFVideoClient': IYFVideoClient,                   'RedditVideoClient': RedditVideoClient,             'RednoteVideoClient': RednoteVideoClient,           'SinaVideoClient': SinaVideoClient,
+        'SixRoomVideoClient': SixRoomVideoClient,           'SohuVideoClient': SohuVideoClient,                 'TBNUKVideoClient': TBNUKVideoClient,               'TedVideoClient': TedVideoClient,
+        'TencentVideoClient': TencentVideoClient,           'UnityVideoClient': UnityVideoClient,               'WWEVideoClient': WWEVideoClient,                   'WeSingVideoClient': WeSingVideoClient,
+        'WeiboVideoClient': WeiboVideoClient,               'WeishiVideoClient': WeishiVideoClient,             'WittyTVVideoClient': WittyTVVideoClient,           'XiguaVideoClient': XiguaVideoClient,
+        'XinpianchangVideoClient': XinpianchangVideoClient, 'XuexiCNVideoClient': XuexiCNVideoClient,           'YinyuetaiVideoClient': YinyuetaiVideoClient,       'YouTubeVideoClient': YouTubeVideoClient,
+        'YoukuVideoClient': YoukuVideoClient,               'ZhihuVideoClient': ZhihuVideoClient,               'ZuiyouVideoClient': ZuiyouVideoClient,             'LeshiVideoClient': LeshiVideoClient,
+        'KanKanNewsVideoClient': KanKanNewsVideoClient,     'NuVidVideoClient': NuVidVideoClient,               'ChinaDailyVideoClient': ChinaDailyVideoClient,     'OrientalDailyVideoClient': OrientalDailyVideoClient,
+        'CCTVVideoClient': CCTVVideoClient,                 'WWW163VideoClient': WWW163VideoClient,             'XinhuaNetVideoClient': XinhuaNetVideoClient,       'PeopleVideoClient': PeopleVideoClient,
+        'HuanQiuVideoClient': HuanQiuVideoClient,           'MingpaoVideoClient': MingpaoVideoClient,           'DailyMotionVideoClient': DailyMotionVideoClient,   'RutubeVideoClient': RutubeVideoClient,
+        'NewsPicksVideoClient': NewsPicksVideoClient,       'MyVideoGeVideoClient': MyVideoGeVideoClient,
     }
 
 
